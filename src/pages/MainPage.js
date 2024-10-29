@@ -1,8 +1,13 @@
 import React from 'react'
+import Title from '../styles/mainStyles';
 
 function MainPage() {
   return (
-    <div>community-frontend</div>
+    <div>
+      <Title>
+        community-frontend
+      </Title>
+    </div>
   )
 }
 
