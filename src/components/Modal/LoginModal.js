@@ -1,14 +1,19 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import styled from "styled-components";
 import character from "../../assets/character.svg";
 import closeButton from "../../assets/closeButton.svg";
 import githubIcon from "../../assets/githubIcon.svg";
 import googleIcon from "../../assets/googleIcon.svg";
 import facebookIcon from "../../assets/facebookIcon.svg";
+import useOnClickOutside from "../../hooks/useOnClickOutside";
 
-function LoginModal() {
+function LoginModal({ setIsModalOpen }) {
   const [email, setEmail] = useState("");
   const [pw, setPw] = useState("");
+
+  // 모달 영역 외부 클릭 시 닫힘
+  const modalRef = useRef();
+  useOnClickOutside(modalRef, () => setIsModalOpen(false));
 
   const handleLogin = () => {
     if (email === "" || pw === "") {
@@ -19,63 +24,82 @@ function LoginModal() {
 
   return (
     <React.Fragment>
-      <LoginContainer>
-        <WelcomeSection>
-          <CharImg src={character} />
-          <WelcomeText>환영합니다!</WelcomeText>
-        </WelcomeSection>
+      <ModalOverlay>
+        <LoginContainer ref={modalRef}>
+          <WelcomeSection>
+            <CharImg src={character} />
+            <WelcomeText>환영합니다!</WelcomeText>
+          </WelcomeSection>
 
-        <LoginSection>
-          <CloseButton>
-            <img
-              src={closeButton}
-              alt="closeBtn"
-              style={{ cursor: "pointer" }}
-            />
-          </CloseButton>
-          <Title>로그인</Title>
-          <P>이메일로 로그인</P>
+          <LoginSection>
+            <CloseButton>
+              <img
+                onClick={() => setIsModalOpen(false)}
+                src={closeButton}
+                alt="closeBtn"
+                style={{ cursor: "pointer" }}
+              />
+            </CloseButton>
+            <Title>로그인</Title>
+            <P>이메일로 로그인</P>
 
-          <LoginForm>
-            <Input
-              value={email}
-              placeholder="이메일을 입력하세요."
-              onChange={(e) => setEmail(e.target.value)}
-            />
-            <Input
-              value={pw}
-              placeholder="비밀번호를 입력하세요."
-              onChange={(e) => setPw(e.target.value)}
-            />
-            <Button onClick={() => handleLogin()}>로그인</Button>
-          </LoginForm>
+            <LoginForm>
+              <Input
+                value={email}
+                placeholder="이메일을 입력하세요."
+                onChange={(e) => setEmail(e.target.value)}
+              />
+              <Input
+                value={pw}
+                placeholder="비밀번호를 입력하세요."
+                onChange={(e) => setPw(e.target.value)}
+              />
+              <Button onClick={() => handleLogin()}>로그인</Button>
+            </LoginForm>
 
-          <SocialSection>
-            <P>소셜 계정으로 로그인</P>
-            <SocialButton>
-              <SocialIcon src={githubIcon} alt="githubIcon" />
-              <SocialIcon src={googleIcon} alt="googleIcon" />
-              <SocialIcon src={facebookIcon} alt="facebookIcon" />
-            </SocialButton>
-          </SocialSection>
+            <SocialSection>
+              <P>소셜 계정으로 로그인</P>
+              <SocialButton>
+                <SocialIcon src={githubIcon} alt="githubIcon" />
+                <SocialIcon src={googleIcon} alt="googleIcon" />
+                <SocialIcon src={facebookIcon} alt="facebookIcon" />
+              </SocialButton>
+            </SocialSection>
 
-          <FootSection>
-            <FootText>아직 회원이 아니신가요?</FootText>
-            <FootLink>회원가입</FootLink>
-          </FootSection>
-        </LoginSection>
-      </LoginContainer>
+            <FootSection>
+              <FootText>아직 회원이 아니신가요?</FootText>
+              <FootLink>회원가입</FootLink>
+            </FootSection>
+          </LoginSection>
+        </LoginContainer>
+      </ModalOverlay>
     </React.Fragment>
   );
 }
 
 export default LoginModal;
 
+const ModalOverlay = styled.div`
+  display: flex;
+  position: fixed;
+  align-items: center;
+  justify-content: center;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 100;
+  background: hsla(0, 0%, 98%, .85);
+`;
+
 const LoginContainer = styled.div`
   display: flex;
   flex-direction: row;
   width: 606px;
   height: 530px;
+  padding-bottom: 48px;
+  background-color: #fff;
+  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.09);
 `;
 
 const WelcomeSection = styled.div`
@@ -104,6 +128,7 @@ const WelcomeText = styled.div`
 
 const LoginSection = styled.div`
   display: flex;
+  height: 530px;
   flex: 1 1;
   flex-direction: column;
   padding: 24px;
@@ -172,17 +197,18 @@ const SocialButton = styled.div`
   margin-top: 1.5rem;
 `;
 
-const FootSection = styled.p`
+const FootSection = styled.div`
   color: #12b886;
   display: flex;
   justify-content: flex-end;
+  margin-top: 2rem;
 `;
 
-const FootText = styled.p`
+const FootText = styled.div`
   margin-right: 0.25rem;
 `;
 
-const FootLink = styled.p`
+const FootLink = styled.div`
   font-weight: 600;
   cursor: pointer;
   &: hover {
