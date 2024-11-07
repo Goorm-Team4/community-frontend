@@ -4,6 +4,7 @@ import { Route, Routes } from 'react-router-dom';
 import MainPage from './pages/MainPage';
 import Header from './components/Header';
 import LoginModal from './components/Modal/LoginModal';
+import SignupModal from './components/Modal/SignupModal';
 
 function App() {
   return (
@@ -11,8 +12,6 @@ function App() {
         <Header></Header>
         <Routes>
           <Route path="/" element={<MainPage />} />
-          {/* 레이아웃 확인하기 위함 */}
-          <Route path="/login" element={<LoginModal />} />
         </Routes>
     </React.Fragment>
 
