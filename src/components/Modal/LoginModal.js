@@ -4,16 +4,17 @@ import character from "../../assets/character.svg";
 import closeButton from "../../assets/closeButton.svg";
 import githubIcon from "../../assets/githubIcon.svg";
 import googleIcon from "../../assets/googleIcon.svg";
-import facebookIcon from "../../assets/facebookIcon.svg";
+import kakaoIcon from "../../assets/kakaoIcon.svg";
 import useOnClickOutside from "../../hooks/useOnClickOutside";
 
-function LoginModal({ setIsModalOpen }) {
+
+function LoginModal({ closeModal, openSignupModal }) {
   const [email, setEmail] = useState("");
   const [pw, setPw] = useState("");
 
   // 모달 영역 외부 클릭 시 닫힘
   const modalRef = useRef();
-  useOnClickOutside(modalRef, () => setIsModalOpen(false));
+  useOnClickOutside(modalRef, closeModal);
 
   const handleLogin = () => {
     if (email === "" || pw === "") {
@@ -34,7 +35,7 @@ function LoginModal({ setIsModalOpen }) {
           <LoginSection>
             <CloseButton>
               <img
-                onClick={() => setIsModalOpen(false)}
+                onClick={closeModal}
                 src={closeButton}
                 alt="closeBtn"
                 style={{ cursor: "pointer" }}
@@ -62,13 +63,13 @@ function LoginModal({ setIsModalOpen }) {
               <SocialButton>
                 <SocialIcon src={githubIcon} alt="githubIcon" />
                 <SocialIcon src={googleIcon} alt="googleIcon" />
-                <SocialIcon src={facebookIcon} alt="facebookIcon" />
+                <SocialIcon src={kakaoIcon} alt="kakaoIcon" />
               </SocialButton>
             </SocialSection>
 
             <FootSection>
               <FootText>아직 회원이 아니신가요?</FootText>
-              <FootLink>회원가입</FootLink>
+              <FootLink onClick={openSignupModal}>회원가입</FootLink>
             </FootSection>
           </LoginSection>
         </LoginContainer>

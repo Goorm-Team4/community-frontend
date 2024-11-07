@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import logo1 from "../assets/logo.svg";
@@ -7,16 +7,31 @@ import search from "../assets/search.svg";
 import userProfile from "../assets/userProfile.png";
 import dropdown from "../assets/dropdown.svg";
 import LoginModal from "./Modal/LoginModal";
+import SignupModal from "./Modal/SignupModal";
 
 function Header() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalType, setModalType] = useState("login");
 
   const navigate = useNavigate();
 
-  const openModal = () => {
+  const openModal = useCallback(() => {
     setIsModalOpen(true);
-  };
+    setModalType("login");
+  }, []);
+
+  const closeModal = useCallback(() => {
+    setIsModalOpen(false);
+  }, []);
+
+  const openLoginModal = useCallback(() => {
+    setModalType("login");
+  }, []);
+
+  const openSignupModal = useCallback(() => {
+    setModalType("signup");
+  }, []);
 
   return (
     <React.Fragment>
@@ -37,7 +52,19 @@ function Header() {
               <NoticeIcon src={notification} onClick={openModal} />
               <SearchIcon src={search} />
               <LoginButton onClick={openModal}>로그인</LoginButton>
-              {isModalOpen && <LoginModal setIsModalOpen={setIsModalOpen} />}
+              {isModalOpen && modalType === "login" && (
+                <LoginModal
+                  closeModal={closeModal}
+                  openSignupModal={openSignupModal}
+                />
+              )}
+
+              {isModalOpen && modalType === "signup" && (
+                <SignupModal
+                  closeModal={closeModal}
+                  openLoginModal={openLoginModal}
+                />
+              )}
             </RightSection>
           )}
         </HeaderBox>
