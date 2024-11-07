@@ -1,46 +1,48 @@
-# Getting Started with Create React App and Redux
+## 👾 커밋 메시지 규칙
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app), using the [Redux](https://redux.js.org/) and [Redux Toolkit](https://redux-toolkit.js.org/) template.
+**`type(#이슈번호): Subject`**
 
-## Available Scripts
+- **`type`**: 커밋의 목적을 나타내는 태그 (예: `feat`, `fix`, `docs` 등).
+- **`#이슈번호`**: 관련 이슈 번호를 포함합니다.
+- **`Subject`**: 변경 사항에 대한 간결한 설명을 작성합니다.
 
-In the project directory, you can run:
+### 커밋 타입 목록
 
-### `npm start`
+| 타입        | 설명                                  |
+|-------------|---------------------------------------|
+| `feat`      | 새로운 기능 추가                       |
+| `fix`       | 버그 수정                             |
+| `docs`      | 문서 수정                             |
+| `style`     | 공백, 세미콜론 등 스타일 수정         |
+| `refactor`  | 코드 리팩토링                         |
+| `perf`      | 성능 개선                             |
+| `test`      | 테스트 추가                           |
+| `chore`     | 빌드 과정 또는 보조 기능 수정         |
+| `design`    | 기능 수정 없이 스타일(CSS)만 수정     |
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+#### 예시
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+- 기능 추가: `feat(#123): 로그인 모달 창 UI 구현`
+- 버그 수정: `fix(#45): 로그인 오류 수정`
 
-### `npm test`
+---
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## 🪵 브랜치 네이밍 규칙
 
-### `npm run build`
+**`type/#이슈번호`**
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- 예시: `feat/#123`, `fix/#45`
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+---
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## ⚙️ 작업 규칙
 
-### `npm run eject`
+1. **적절한 브랜치 생성**  
+   - 작업 시작 전, 커밋 컨벤션에 맞는 이름으로 새로운 브랜치를 생성합니다.
+   
+2. **작업 후 해당 브랜치를 생성했던 브랜치로 PR**  
+   - 작업 완료 후, 생성한 브랜치를 원래 브랜치(예: `main` 또는 `develop`)로 PR합니다.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+3. **작업 완료된 브랜치 삭제**  
+   - PR이 승인되고 병합된 후, 완료된 브랜치를 원격과 로컬 저장소에서 삭제하여 불필요한 브랜치를 정리합니다.
+     
