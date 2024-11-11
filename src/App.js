@@ -2,6 +2,7 @@ import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 
 import MainPage from './pages/MainPage';
+import PostPage from './pages/PostPage';
 import NavBar from './components/NavBar';
 import { useSelector } from 'react-redux';
 import { GlobalStyle } from './styles/Styles';
@@ -12,12 +13,13 @@ function App() {
   const isActive = useSelector((state) => state.darkMode.darkModeActive);
   return (
     <React.Fragment>
-        <Header></Header>
-        <Routes>
       <GlobalStyle $active={isActive} />
+      <Header></Header>
       <NavBar></NavBar>
-          <Route path="/" element={<MainPage />} ></MainPage>
-        </Routes>
+      <Routes>
+        <Route path="/" element={<MainPage />} />
+        <Route path="/post" element={<PostPage />} />
+      </Routes>
     </React.Fragment>
 
   );

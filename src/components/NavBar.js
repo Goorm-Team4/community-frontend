@@ -1,6 +1,6 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { Navbar, LeftNavbar, RightNavbar, Logo, NavItem, NavItems, ToggleContainer } from '../styles/Styles'
+import { Navbar, LeftNavbar, RightNavbar, NavItem, NavItems, ToggleContainer } from '../styles/Styles'
 import { toggle } from '../redux/darkModeSlice';
 
 export default function NavBar() {
@@ -11,7 +11,6 @@ export default function NavBar() {
   return (
     <Navbar $active={isActive}>
       <LeftNavbar>
-        <Logo>Logo</Logo>
         <NavItems>
           <NavItem href="#">전체</NavItem>
           <NavItem href="#">최신</NavItem>

@@ -1,6 +1,13 @@
 import styled, { createGlobalStyle } from "styled-components";
 
 export const GlobalStyle = createGlobalStyle`
+  * {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    text-decoration: none;
+  }
+
   div {
     background-color: ${(props) => (props.$active ? '#f5f5f5' : '##3b3b3b')}
   }
@@ -11,6 +18,52 @@ export const GlobalStyle = createGlobalStyle`
     background-color: ${(props) => (props.$active ? '#ffffff' : '#333')}
   }
 `
+
+export const MainContianer = styled.ul`
+  width: 1728px;
+  height: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+  @media screen and (max-width: 1919px) {
+      width:1376px
+  }
+
+  @media screen and (max-width: 1440px) {
+      width:1024px
+  }
+
+  @media screen and (max-width: 1056px) {
+      width:100%
+  }
+`;
+
+export const PostcardGrid = styled.ul`
+  display: grid;
+  grid-gap: 32px;
+  margin: 0;
+  padding: 0;
+  --card-count: 5;
+  --width : 20%;
+  --spacer: calc(var(--card-count) - 1);
+  grid-template-columns: repeat(var(--card-count), calc(var(--width) - (32px* var(--spacer) / var(--card-count))));
+  
+  @media (max-width: 1919px ) {
+    --card-count: 4;
+    --width : 25%;
+  }
+  @media (max-width: 1440px ) {
+    --card-count: 3;
+    --width : 33.33%;
+  }
+  @media (max-width: 1056px ) {
+    --card-count: 2;
+    --width : 50%;
+  }
+  @media (max-width: 768px ) {
+    grid-template-columns: repeat(1, 100%);
+    grid-gap: 16px;
+  }
+`;
 
 export const Navbar = styled.nav`
   display: flex;
@@ -27,10 +80,6 @@ export const LeftNavbar = styled.div`
 export const RightNavbar = styled.div`
   align-items: center;
   padding: 1rem 2rem;
-`;
-
-export const Logo = styled.div`
-  font-size: 1.5rem;
 `;
 
 export const NavItems = styled.div`
@@ -55,58 +104,4 @@ export const ToggleContainer = styled.button`
   &:hover {
     color: ${(props) => (props.$active ? '#b8b8b8' : '#bbb')};
   }
-`;
-
-export const PostcardList = styled.ul`
-  display: grid;
-  grid-gap: 32px;
-  grid-template-columns: 2fr 2fr 2fr 2fr;
-  grid-template-rows: 2fr 2fr 2fr 2fr;
-  width: 100vw;
-  height: 100vh;
-`;
-
-export const Postcard = styled.li`
-  width: 300px;
-  height: 200px;
-  background-color: gray;
-  background-size: cover;
-  display: flex;
-  flex-flow: column nowrap;
-  box-shadow: 0 4px 16px 0 rgba(0, 0, 0, .04);
-  align-content: center;
-  color: black;
-  font-size: 1.5rem;
-  font-weight: bold;
-  transition: box-shadow .25s ease-in, transform .25s ease-in;
-
-`;
-
-export const PostcardImage = styled.img`
-  background-color: aliceblue;
-  height: 30%;
-  display: block;
-  color: inherit;
-  text-decoration: none;
-`;
-
-export const PostcardImageSize = styled.div`
-  padding-top: 52.1921%;
-`;
-
-
-export const PostcardContent = styled.div`
-  padding: 1rem;
-  display: flex;
-  flex-flow: column nowrap;
-  font-size: 0.75rem;
-`;
-
-export const PostcardFooter = styled.div`
-  padding: .625rem 1rem;
-  border-top: 1px solid gray;
-  display: flex;
-  font-size: .75rem;
-  line-height: 1.5;
-  justify-content: space-between;
 `;

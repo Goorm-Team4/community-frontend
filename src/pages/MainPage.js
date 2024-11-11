@@ -1,15 +1,11 @@
 import React from 'react'
-import { Title } from '../styles/mainStyles';
 import PostCard from '../components/PostCard';
-import { PostcardList } from '../styles/Styles';
+import { MainContianer, PostcardGrid } from '../styles/Styles';
 
 function MainPage() {
   return (
-    <div>
-      <Title>
-        community-frontend
-      </Title>
-      <PostcardList>
+    <MainContianer>
+      <PostcardGrid>
         <PostCard />
         <PostCard />
         <PostCard />
@@ -21,8 +17,8 @@ function MainPage() {
         <PostCard />
         <PostCard />
         <PostCard />
-      </PostcardList>
-    </div>
+      </PostcardGrid>
+    </MainContianer>
   )
 }
 
