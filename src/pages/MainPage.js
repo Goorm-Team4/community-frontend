@@ -1,13 +1,24 @@
 import React from 'react'
-import Title from '../styles/mainStyles';
+import PostCard from '../components/PostCard';
+import { MainContianer, PostcardGrid } from '../styles/Styles';
 
 function MainPage() {
   return (
-    <div>
-      <Title>
-        community-frontend
-      </Title>
-    </div>
+    <MainContianer>
+      <PostcardGrid>
+        <PostCard />
+        <PostCard />
+        <PostCard />
+        <PostCard />
+        <PostCard />
+        <PostCard />
+        <PostCard />
+        <PostCard />
+        <PostCard />
+        <PostCard />
+        <PostCard />
+      </PostcardGrid>
+    </MainContianer>
   )
 }
 
