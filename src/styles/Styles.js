@@ -1,6 +1,15 @@
 import styled, { createGlobalStyle } from "styled-components";
 
 export const GlobalStyle = createGlobalStyle`
+
+  :root {
+    --gray: #f1f3f5;
+    --background-black: #212121;
+    --background-white: #fff;
+    --text: #ececec;
+    --border: #e0e0e0;
+  }
+
   * {
     padding: 0;
     margin: 0;
@@ -9,13 +18,13 @@ export const GlobalStyle = createGlobalStyle`
   }
 
   div {
-    background-color: ${(props) => (props.$active ? '#f5f5f5' : '##3b3b3b')}
+    background-color: ${(props) => (props.$active ? 'var(--background-white)' : 'var(--background-black)')}
   }
   body {
-    background-color: ${(props) => (props.$active ? '#ffffff' : '#333')}
+    background-color: ${(props) => (props.$active ? 'var(--background-white)' : 'var(--gray)')}
   }
   li {
-    background-color: ${(props) => (props.$active ? '#ffffff' : '#333')}
+    background-color: ${(props) => (props.$active ? 'var(--background-white)' : 'var(--gray)')}
   }
 `
 
