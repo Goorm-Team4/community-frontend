@@ -36,11 +36,12 @@ function LoginModal({ closeModal, openSignupModal }) {
 
     try {
       const response = await emailLogin(email, password);
-      console.log("로그인 응답 데이터: ", response);
-      console.log(email, password);
 
       if (response.code === "200") {
-        dispatch(loginUser({ accessToken: response.result.accessToken }));
+        const accessToken = response.result.accessToken;
+        localStorage.setItem("accessToken", accessToken);
+        dispatch(loginUser({ accessToken }));
+        
         alert("로그인 성공");
         navigate("/");
       } else {
