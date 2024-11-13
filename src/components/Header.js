@@ -1,43 +1,48 @@
-import React, { useCallback, useState } from "react";
+import React from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
+
 import logo1 from "../assets/logo.svg";
 import notification from "../assets/notification.svg";
 import search from "../assets/search.svg";
 import userProfile from "../assets/userProfile.png";
 import dropdown from "../assets/dropdown.svg";
+
 import LoginModal from "./Modal/LoginModal";
 import SignupModal from "./Modal/SignupModal";
+import { useDispatch, useSelector } from "react-redux";
+import { openModal, closeModal } from "../redux/modalSlice";
+import { useDebounce } from "../hooks/useDebounce";
 
 function Header() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [modalType, setModalType] = useState("login");
+  const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
+  const { isModalOpen, modalType } = useSelector((state) => state.modal);
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-  const openModal = useCallback(() => {
-    setIsModalOpen(true);
-    setModalType("login");
-  }, []);
+  const debouncedLoginModal = useDebounce("login", 500);
+  const debouncedSignupModal = useDebounce("signup", 500);
 
-  const closeModal = useCallback(() => {
-    setIsModalOpen(false);
-  }, []);
+  const openLoginModal = () => {
+    dispatch(openModal(debouncedLoginModal));
+  };
 
-  const openLoginModal = useCallback(() => {
-    setModalType("login");
-  }, []);
+  const openSignupModal = () => {
+    dispatch(openModal(debouncedSignupModal));
+  };
 
-  const openSignupModal = useCallback(() => {
-    setModalType("signup");
-  }, []);
+  const handleCloseModal = () => {
+    if (isModalOpen) {
+      dispatch(closeModal());
+    }
+  };
 
   return (
     <React.Fragment>
       <HeaderContainer>
         <HeaderBox>
-          <LogoImg src={logo1} onClick={navigate("/")}></LogoImg>
+          <LogoImg src={logo1} onClick={() => navigate("/")}></LogoImg>
 
           {isLoggedIn ? (
             <RightSection>
@@ -49,19 +54,19 @@ function Header() {
             </RightSection>
           ) : (
             <RightSection>
-              <NoticeIcon src={notification} onClick={openModal} />
+              <NoticeIcon src={notification} />
               <SearchIcon src={search} />
-              <LoginButton onClick={openModal}>로그인</LoginButton>
+              <LoginButton onClick={openLoginModal}>로그인</LoginButton>
               {isModalOpen && modalType === "login" && (
                 <LoginModal
-                  closeModal={closeModal}
+                  closeModal={handleCloseModal}
                   openSignupModal={openSignupModal}
                 />
               )}
 
               {isModalOpen && modalType === "signup" && (
                 <SignupModal
-                  closeModal={closeModal}
+                  closeModal={handleCloseModal}
                   openLoginModal={openLoginModal}
                 />
               )}
