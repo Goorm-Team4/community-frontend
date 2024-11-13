@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import * as Styles from "../styles/HeaderStyles";
 import { useNavigate } from "react-router-dom";
 
@@ -13,8 +13,11 @@ import SignupModal from "./Modal/SignupModal";
 import { useDispatch, useSelector } from "react-redux";
 import { openModal, closeModal } from "../redux/modalSlice";
 import { useDebounce } from "../hooks/useDebounce";
+import { logoutUser } from "../redux/userSlice";
 
 function Header() {
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
   const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
   const { isModalOpen, modalType } = useSelector((state) => state.modal);
 
@@ -38,6 +41,15 @@ function Header() {
     }
   };
 
+  const toggleDropdown = () => {
+    setIsDropdownOpen(!isDropdownOpen);
+  };
+
+  const handleLogout = () => {
+    dispatch(logoutUser());
+    navigate("/");
+  }
+
   return (
     <React.Fragment>
       <Styles.HeaderContainer>
@@ -50,7 +62,17 @@ function Header() {
               <Styles.SearchIcon src={search} />
               <Styles.WriteButton>새 글 작성</Styles.WriteButton>
               <Styles.ProfileIcon src={userProfile} />
-              <Styles.DropdownIcon src={dropdown} />
+              <Styles.DropdownIcon src={dropdown} onClick={toggleDropdown} />
+
+              {isDropdownOpen && (
+                <Styles.DropdownBox>
+                  <Styles.DropdownMenu>
+                    <Styles.DropdownItem>내 벨로그</Styles.DropdownItem>
+                    <Styles.DropdownItem>설정</Styles.DropdownItem>
+                    <Styles.DropdownItem onClick={handleLogout}>로그아웃</Styles.DropdownItem>
+                  </Styles.DropdownMenu>
+                </Styles.DropdownBox>
+              )}
             </Styles.RightSection>
           ) : (
             <Styles.RightSection>
