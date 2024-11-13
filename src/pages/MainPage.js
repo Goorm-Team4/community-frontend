@@ -3,6 +3,9 @@ import Title from '../styles/mainStyles';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { kakaoLogin } from '../services/auth';
+import PostCard from '../components/PostCard';
+import { MainContianer, PostcardGrid } from '../styles/Styles';
+
 
 function MainPage() {
   const location = useLocation();
@@ -14,11 +17,21 @@ function MainPage() {
   }, [dispatch, location, navigate]);
   
   return (
-    <div>
-      <Title>
-        community-frontend
-      </Title>
-    </div>
+    <MainContianer>
+      <PostcardGrid>
+        <PostCard />
+        <PostCard />
+        <PostCard />
+        <PostCard />
+        <PostCard />
+        <PostCard />
+        <PostCard />
+        <PostCard />
+        <PostCard />
+        <PostCard />
+        <PostCard />
+      </PostcardGrid>
+    </MainContianer>
   )
 }
 
