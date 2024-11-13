@@ -1,4 +1,5 @@
 import React, { useState, useRef } from "react";
+import { useDispatch } from "react-redux";
 import styled from "styled-components";
 import character from "../../assets/character.svg";
 import closeButton from "../../assets/closeButton.svg";
@@ -6,19 +7,49 @@ import githubIcon from "../../assets/githubIcon.svg";
 import googleIcon from "../../assets/googleIcon.svg";
 import kakaoIcon from "../../assets/kakaoIcon.svg";
 import useOnClickOutside from "../../hooks/useOnClickOutside";
-
+import { emailLogin } from "../../services/auth";
+import { loginUser } from "../../redux/userSlice";
+import { useNavigate } from "react-router-dom";
 
 function LoginModal({ closeModal, openSignupModal }) {
   const [email, setEmail] = useState("");
-  const [pw, setPw] = useState("");
+  const [password, setPassword] = useState("");
+
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   // 모달 영역 외부 클릭 시 닫힘
   const modalRef = useRef();
   useOnClickOutside(modalRef, closeModal);
 
-  const handleLogin = () => {
-    if (email === "" || pw === "") {
+  const kakaoAuthRedirect = () => {
+    window.location.href =  `${process.env.REACT_APP_API_BASE_URL}/oauth2/authorization/kakao`;
+  };
+
+  const handleEmailLogin = async (e) => {
+    e.preventDefault();
+
+    if (email === "" || password === "") {
       alert("잘못된 형식입니다.");
+      return;
+    }
+
+    try {
+      const response = await emailLogin(email, password);
+      console.log("로그인 응답 데이터: ", response);
+      console.log(email, password);
+
+      if (response.code === "200") {
+        dispatch(loginUser({ accessToken: response.result.accessToken }));
+        alert("로그인 성공");
+        navigate("/");
+      } else {
+        alert("로그인에 실패했습니다. 다시 시도해주세요.");
+      }
+    } catch (error) {
+      console.log(email, password);
+      console.error("로그인 실패: ", error.response?.data || error.message);
+      alert("로그인에 실패했습니다. 다시 시도해주세요.");
       return;
     }
   };
@@ -44,18 +75,20 @@ function LoginModal({ closeModal, openSignupModal }) {
             <Title>로그인</Title>
             <P>이메일로 로그인</P>
 
-            <LoginForm>
+            <LoginForm onSubmit={handleEmailLogin}>
               <Input
                 value={email}
+                type="email"
                 placeholder="이메일을 입력하세요."
                 onChange={(e) => setEmail(e.target.value)}
               />
               <Input
-                value={pw}
+                value={password}
+                type="password"
                 placeholder="비밀번호를 입력하세요."
-                onChange={(e) => setPw(e.target.value)}
+                onChange={(e) => setPassword(e.target.value)}
               />
-              <Button onClick={() => handleLogin()}>로그인</Button>
+              <Button type="submit">로그인</Button>
             </LoginForm>
 
             <SocialSection>
@@ -63,7 +96,7 @@ function LoginModal({ closeModal, openSignupModal }) {
               <SocialButton>
                 <SocialIcon src={githubIcon} alt="githubIcon" />
                 <SocialIcon src={googleIcon} alt="googleIcon" />
-                <SocialIcon src={kakaoIcon} alt="kakaoIcon" />
+                <SocialIcon src={kakaoIcon} alt="kakaoIcon" onClick={kakaoAuthRedirect}/>
               </SocialButton>
             </SocialSection>
 
