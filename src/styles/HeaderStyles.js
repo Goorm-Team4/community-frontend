@@ -93,3 +93,27 @@ export const LoginButton = styled.button`
     transition: all 0.125s ease-in;
   }
 `;
+export const DropdownBox = styled.div`
+  position: relative;
+  display: inline-block;
+  z-index: 10;
+`;
+export const DropdownMenu = styled.div`
+  position: absolute;
+  width: 12rem;
+  margin-top: 1.5rem;
+  right: 0;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+`;
+
+export const DropdownItem = styled.div`
+  display: block;
+  padding: 1rem;
+  cursor: pointer;
+  transition: background-color 0.125s;
+
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+    color: var(--primary-green1);
+  }
+`;
