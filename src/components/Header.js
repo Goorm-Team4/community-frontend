@@ -1,5 +1,5 @@
 import React from "react";
-import styled from "styled-components";
+import * as Styles from "../styles/HeaderStyles";
 import { useNavigate } from "react-router-dom";
 
 import logo1 from "../assets/logo.svg";
@@ -40,23 +40,23 @@ function Header() {
 
   return (
     <React.Fragment>
-      <HeaderContainer>
-        <HeaderBox>
-          <LogoImg src={logo1} onClick={() => navigate("/")}></LogoImg>
+      <Styles.HeaderContainer>
+        <Styles.HeaderBox>
+          <Styles.LogoImg src={logo1} onClick={() => navigate("/")}></Styles.LogoImg>
 
           {isLoggedIn ? (
-            <RightSection>
-              <NoticeIcon src={notification} />
-              <SearchIcon src={search} />
-              <WriteButton>새 글 작성</WriteButton>
-              <ProfileIcon src={userProfile} />
-              <DropdownIcon src={dropdown} />
-            </RightSection>
+            <Styles.RightSection>
+              <Styles.NoticeIcon src={notification} />
+              <Styles.SearchIcon src={search} />
+              <Styles.WriteButton>새 글 작성</Styles.WriteButton>
+              <Styles.ProfileIcon src={userProfile} />
+              <Styles.DropdownIcon src={dropdown} />
+            </Styles.RightSection>
           ) : (
-            <RightSection>
-              <NoticeIcon src={notification} />
-              <SearchIcon src={search} />
-              <LoginButton onClick={openLoginModal}>로그인</LoginButton>
+            <Styles.RightSection>
+              <Styles.NoticeIcon src={notification} />
+              <Styles.SearchIcon src={search} />
+              <Styles.LoginButton onClick={openLoginModal}>로그인</Styles.LoginButton>
               {isModalOpen && modalType === "login" && (
                 <LoginModal
                   closeModal={handleCloseModal}
@@ -70,105 +70,12 @@ function Header() {
                   openLoginModal={openLoginModal}
                 />
               )}
-            </RightSection>
+            </Styles.RightSection>
           )}
-        </HeaderBox>
-      </HeaderContainer>
+        </Styles.HeaderBox>
+      </Styles.HeaderContainer>
     </React.Fragment>
   );
 }
 
 export default Header;
-
-const HeaderContainer = styled.div`
-  padding: 12px;
-`;
-
-const HeaderBox = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-`;
-
-const LogoImg = styled.img`
-  width: 70px;
-  cursor: pointer;
-`;
-
-const RightSection = styled.div`
-  display: flex;
-  align-items: center;
-`;
-
-const NoticeIcon = styled.img`
-  width: 23px;
-  margin-right: 10px;
-  cursor: pointer;
-  padding: 10px;
-  border-radius: 50%;
-  transition: background-color 0.125s;
-
-  &:hover {
-    background-color: rgba(0, 0, 0, 0.1);
-  }
-`;
-
-const SearchIcon = styled.img`
-  width: 23px;
-  margin-right: 10px;
-  cursor: pointer;
-  padding: 10px;
-  border-radius: 50%;
-  transition: background-color 0.125s;
-
-  &:hover {
-    background-color: rgba(0, 0, 0, 0.1);
-  }
-`;
-
-const WriteButton = styled.button`
-  height: 2rem;
-  padding: 1px 16px;
-  font-size: 1rem;
-  font-weight: 700;
-  border: 1px solid #212529;
-  border-radius: 1rem;
-  background-color: #fff;
-  color: #212529;
-  transition: all 0.25s;
-  cursor: pointer;
-  margin-right: 20px;
-
-  &: hover {
-    background-color: #212529;
-    color: #fff;
-  }
-`;
-
-const ProfileIcon = styled.img`
-  width: 40px;
-  border-radius: 50%;
-  cursor: pointer;
-`;
-
-const DropdownIcon = styled.img`
-  width: 30px;
-  cursor: pointer;
-`;
-
-const LoginButton = styled.button`
-  height: 2rem;
-  padding-left: 1rem;
-  padding-right: 1rem;
-  border-radius: 1rem;
-  font-size: 1rem;
-  background-color: #212529;
-  border: none;
-  color: #ffffff;
-  cursor: pointer;
-
-  &:hover {
-    background-color: #4a4a4a;
-    transition: all 0.125s ease-in;
-  }
-`;

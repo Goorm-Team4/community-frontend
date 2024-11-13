@@ -1,5 +1,4 @@
-import React, { useEffect } from 'react'
-import Title from '../styles/mainStyles';
+import React, { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { kakaoLogin } from '../services/auth';
