@@ -1,18 +1,6 @@
 import axios from "axios";
 import { loginUser } from "../redux/userSlice";
 
-export const kakaoLogin = (dispatch, location, navigate) => {
-  const urlParams = new URLSearchParams(location.search);
-  const accessToken = urlParams.get("accessToken");
-
-  if (accessToken) {
-    dispatch(loginUser({ accessToken }));
-
-    // url에서 accessToken 제거
-    navigate("/", { replace: true });
-  }
-};
-
 export const emailLogin = async (email, password) => {
   const response = await axios.post(
     `${process.env.REACT_APP_API_BASE_URL}/api/v1/auth/login`,
@@ -108,3 +96,18 @@ export const emailSignup = async (info, imageFile) => {
     throw error;
   }
 };
+
+// accessToken 저장
+export const storeLogin = (dispatch, location, navigate) => {
+    const accessToken = localStorage.getItem('accessToken') || new URLSearchParams(location.search).get("accessToken");
+
+    if (accessToken) {
+      dispatch(loginUser({ accessToken }));
+  
+      // 카카오 로그인 시 URL의 accessToken 제거
+      if (!localStorage.getItem('accessToken')) {
+        localStorage.setItem('accessToken', accessToken);
+        navigate("/", { replace: true });
+      }
+    }
+  };

@@ -46,6 +46,7 @@ function Header() {
   };
 
   const handleLogout = () => {
+    localStorage.removeItem("accessToken");
     dispatch(logoutUser());
     navigate("/");
   }
