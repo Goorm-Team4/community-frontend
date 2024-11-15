@@ -88,7 +88,12 @@ export const emailSignup = async (info, imageFile) => {
   try {
     const response = await axios.post(
       `${process.env.REACT_APP_API_BASE_URL}/api/v1/auth/signup`,
-      formData
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
     );
     return response.data;
   } catch (error) {
@@ -99,15 +104,17 @@ export const emailSignup = async (info, imageFile) => {
 
 // accessToken 저장
 export const storeLogin = (dispatch, location, navigate) => {
-    const accessToken = localStorage.getItem('accessToken') || new URLSearchParams(location.search).get("accessToken");
+  const accessToken =
+    localStorage.getItem("accessToken") ||
+    new URLSearchParams(location.search).get("accessToken");
 
-    if (accessToken) {
-      dispatch(loginUser({ accessToken }));
-  
-      // 카카오 로그인 시 URL의 accessToken 제거
-      if (!localStorage.getItem('accessToken')) {
-        localStorage.setItem('accessToken', accessToken);
-        navigate("/", { replace: true });
-      }
+  if (accessToken) {
+    dispatch(loginUser({ accessToken }));
+
+    // 카카오 로그인 시 URL의 accessToken 제거
+    if (!localStorage.getItem("accessToken")) {
+      localStorage.setItem("accessToken", accessToken);
+      navigate("/", { replace: true });
     }
-  };
+  }
+};
