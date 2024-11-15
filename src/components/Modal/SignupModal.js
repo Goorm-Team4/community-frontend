@@ -14,6 +14,7 @@ import closeButton from "../../assets/closeButton.svg";
 import githubIcon from "../../assets/githubIcon.svg";
 import googleIcon from "../../assets/googleIcon.svg";
 import kakaoIcon from "../../assets/kakaoIcon.svg";
+import defaultProfile from "../../assets/userProfile.png";
 import useOnClickOutside from "../../hooks/useOnClickOutside";
 import Timer from "../Timer";
 import { signupUser } from "../../redux/userSlice";
@@ -26,6 +27,7 @@ function SignupModal({ closeModal, openLoginModal }) {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [profileImage, setProfileImage] = useState(null);
+  const [preview, setPreview] = useState(defaultProfile);
 
   const [isGetCode, setIsGetCode] = useState(false);
   const [isTimer, setIsTimer] = useState(false);
@@ -40,6 +42,21 @@ function SignupModal({ closeModal, openLoginModal }) {
 
   const modalRef = useRef();
   useOnClickOutside(modalRef, closeModal);
+
+  const handleProfileImage = (e) => {
+    if (e.target.files[0]) {
+      setProfileImage(e.target.files[0]);
+      setPreview(URL.createObjectURL(e.target.files[0]));
+    } else {
+      setProfileImage(null);
+      setPreview(defaultProfile);
+    }
+  };
+
+  const handleProfileReset = () => {
+    setProfileImage(null);
+    setPreview(defaultProfile);
+  };
 
   // 이메일 인증코드 전송
   const handleSendCode = useCallback(async () => {
@@ -128,10 +145,34 @@ function SignupModal({ closeModal, openLoginModal }) {
     <React.Fragment>
       <Styles.ModalOverlay>
         <Styles.Container ref={modalRef}>
-          <Styles.WelcomeSection>
-            <Styles.CharImg src={character} />
-            <Styles.WelcomeText>환영합니다!</Styles.WelcomeText>
-          </Styles.WelcomeSection>
+          {step === 1 && (
+            <>
+              <Styles.WelcomeSection>
+                <Styles.CharImg src={character} />
+                <Styles.WelcomeText>환영합니다!</Styles.WelcomeText>
+              </Styles.WelcomeSection>
+            </>
+          )}
+          {step === 2 && (
+            <>
+              <Styles.WelcomeSection>
+                <Styles.ProfileLabel htmlFor="profileImage">
+                  <Styles.Preview src={preview} alt="미리보기" />
+                  <Styles.UploadText>이미지 업로드</Styles.UploadText>
+                </Styles.ProfileLabel>
+                <Styles.UploadReset onClick={handleProfileReset}>
+                  이미지 제거
+                </Styles.UploadReset>
+
+                <Styles.ProfileInput
+                  type="file"
+                  accept="image/*"
+                  id="profileImage"
+                  onChange={handleProfileImage}
+                />
+              </Styles.WelcomeSection>
+            </>
+          )}
 
           <Styles.SignupSection>
             <Styles.CloseButton>

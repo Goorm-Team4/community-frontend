@@ -47,6 +47,41 @@ export const WelcomeText = styled.div`
   text-align: center;
 `;
 
+export const ProfileLabel = styled.label`
+  font-size: 16px;
+  font-weight: 500;
+  color: #495057;
+  cursor: pointer;
+`;
+
+export const Preview = styled.img`
+  border-radius: 50%;
+  position: relative;
+  object-fit: cover;
+  width: 150px;
+  height: 150px;
+`;
+
+export const UploadText = styled.p`
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  font-size: 16px;
+  justify-self: center;
+`;
+
+export const UploadReset = styled.button`
+  border: none;
+  background: none;
+  font-size: 16px;
+  font-weight: 500;
+  color: #495057;
+  cursor: pointer;
+`;
+
+export const ProfileInput = styled.input`
+  display: none;
+`;
+
 export const LoginSection = styled.div`
   display: flex;
   height: 530px;

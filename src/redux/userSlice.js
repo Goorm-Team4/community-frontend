@@ -7,14 +7,14 @@ export const userSlice = createSlice({
         username: "",
         isLoggedIn: false,
         accessToken: "",
-        profileImageUrl: "",
+        profileImage: "",
     },
     reducers: {
         signupUser: (state, action) => {
-            const { email, username, profileImageUrl } = action.payload;
+            const { email, username, profileImage } = action.payload;
             state.email = email;
             state.username = username;
-            state.profileImageUrl = profileImageUrl;
+            state.profileImage = profileImage;
         },
         loginUser: (state, action) => {
             state.email = action.payload.email;
@@ -27,7 +27,7 @@ export const userSlice = createSlice({
             state.username = "";
             state.isLoggedIn = false;
             state.accessToken = "";
-            state.profileImageUrl = "";
+            state.profileImage = "";
         },
     },
 });
