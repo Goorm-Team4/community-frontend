@@ -108,13 +108,68 @@ export const storeLogin = (dispatch, location, navigate) => {
     localStorage.getItem("accessToken") ||
     new URLSearchParams(location.search).get("accessToken");
 
-  if (accessToken) {
+    if (accessToken) {
     dispatch(loginUser({ accessToken }));
 
-    // 카카오 로그인 시 URL의 accessToken 제거
-    if (!localStorage.getItem("accessToken")) {
-      localStorage.setItem("accessToken", accessToken);
-      navigate("/", { replace: true });
+      // 카카오 로그인 시 URL의 accessToken 제거
+      if (!localStorage.getItem("accessToken")) {
+        localStorage.setItem("accessToken", accessToken);
+        navigate("/", { replace: true });
+      }
     }
+};
+
+
+// 프로필 조회
+export const fetchProfile = async () => {
+  const token = localStorage.getItem("accessToken");
+
+  const response = await axios.get(
+    `${process.env.REACT_APP_API_BASE_URL}/api/v1/members/me`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`, 
+      },
+    }
+  );
+  const { email, username, profileImageUrl } = response.data.result;
+  return {
+    email,
+    username,
+    profileImage: profileImageUrl, 
+  };
+};
+
+
+// 프로필 수정
+export const updateProfile = async ({ username, profileImageUrl }) => {
+  const formData = new FormData();
+
+  formData.append("username", username);
+  
+  if (profileImageUrl instanceof File) {
+    formData.append("image", profileImageUrl);
+  }
+
+  const token = localStorage.getItem("accessToken");
+
+  try {
+    console.log("보내는 데이터: ", [...formData.entries()]);
+
+    const response = await axios.patch(
+      `${process.env.REACT_APP_API_BASE_URL}/api/v1/members/me`,
+      formData,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+    return response.data.result;
+
+  } catch (error) {
+    console.error("프로필 수정 실패: ", error.response?.data || error.message);
+    throw error;
   }
 };

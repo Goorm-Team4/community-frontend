@@ -17,7 +17,7 @@ import kakaoIcon from "../../assets/kakaoIcon.svg";
 import defaultProfile from "../../assets/userProfile.png";
 import useOnClickOutside from "../../hooks/useOnClickOutside";
 import Timer from "../Timer";
-import { signupUser } from "../../redux/userSlice";
+import { loginUser } from "../../redux/userSlice";
 
 function SignupModal({ closeModal, openLoginModal }) {
   const [step, setStep] = useState(1);
@@ -124,7 +124,7 @@ function SignupModal({ closeModal, openLoginModal }) {
       const response = await emailSignup(info, profileImage);
 
       if (response.code === "200") {
-        dispatch(signupUser({ email, username, profileImage }));
+        dispatch(loginUser({ email, username, profileImage }));
         alert("회원가입이 완료되었습니다.");
         dispatch(closeModal);
         navigate("/");

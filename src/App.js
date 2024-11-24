@@ -1,9 +1,11 @@
 import React, { useEffect } from "react";
 import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
 
+import ProtectedRoute from "./components/ProtectedRoute";
 import Loading from "./components/Loading";
 import MainPage from "./pages/MainPage";
 import PostPage from "./pages/PostPage";
+import MyPage from "./pages/MyPage";
 import NavBar from "./components/NavBar";
 import { useDispatch, useSelector } from "react-redux";
 import { GlobalStyle } from "./styles/Styles";
@@ -29,6 +31,11 @@ function App() {
       <Routes>
         <Route path="/" element={<MainPage />} />
         <Route path="/post" element={<PostPage />} />
+        <Route path="/mypage" element={
+          <ProtectedRoute>
+            <MyPage />
+          </ProtectedRoute>
+        }/>
       </Routes>
     </React.Fragment>
   );
