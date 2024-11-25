@@ -1,169 +1,104 @@
-import React, { useCallback, useState } from "react";
-import styled from "styled-components";
+import React, { useState } from "react";
+import * as Styles from "../styles/HeaderStyles";
 import { useNavigate } from "react-router-dom";
+
 import logo1 from "../assets/logo.svg";
 import notification from "../assets/notification.svg";
 import search from "../assets/search.svg";
 import userProfile from "../assets/userProfile.png";
 import dropdown from "../assets/dropdown.svg";
+
 import LoginModal from "./Modal/LoginModal";
 import SignupModal from "./Modal/SignupModal";
+import { useDispatch, useSelector } from "react-redux";
+import { openModal, closeModal } from "../redux/modalSlice";
+import { useDebounce } from "../hooks/useDebounce";
+import { logoutUser } from "../redux/userSlice";
 
 function Header() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [modalType, setModalType] = useState("login");
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+  const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
+  const { isModalOpen, modalType } = useSelector((state) => state.modal);
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-  const openModal = useCallback(() => {
-    setIsModalOpen(true);
-    setModalType("login");
-  }, []);
+  const debouncedLoginModal = useDebounce("login", 500);
+  const debouncedSignupModal = useDebounce("signup", 500);
 
-  const closeModal = useCallback(() => {
-    setIsModalOpen(false);
-  }, []);
+  const openLoginModal = () => {
+    dispatch(openModal(debouncedLoginModal));
+  };
 
-  const openLoginModal = useCallback(() => {
-    setModalType("login");
-  }, []);
+  const openSignupModal = () => {
+    dispatch(openModal(debouncedSignupModal));
+  };
 
-  const openSignupModal = useCallback(() => {
-    setModalType("signup");
-  }, []);
+  const handleCloseModal = () => {
+    if (isModalOpen) {
+      dispatch(closeModal());
+    }
+  };
+
+  const toggleDropdown = () => {
+    setIsDropdownOpen(!isDropdownOpen);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("accessToken");
+    dispatch(logoutUser());
+    navigate("/");
+  }
 
   return (
     <React.Fragment>
-      <HeaderContainer>
-        <HeaderBox>
-          <LogoImg src={logo1} onClick={navigate("/")}></LogoImg>
+      <Styles.HeaderContainer>
+        <Styles.HeaderBox>
+          <Styles.LogoImg src={logo1} onClick={() => navigate("/")}></Styles.LogoImg>
 
           {isLoggedIn ? (
-            <RightSection>
-              <NoticeIcon src={notification} />
-              <SearchIcon src={search} />
-              <WriteButton>새 글 작성</WriteButton>
-              <ProfileIcon src={userProfile} />
-              <DropdownIcon src={dropdown} />
-            </RightSection>
+            <Styles.RightSection>
+              <Styles.NoticeIcon src={notification} />
+              <Styles.SearchIcon src={search} />
+              <Styles.WriteButton>새 글 작성</Styles.WriteButton>
+              <Styles.ProfileIcon src={userProfile} />
+              <Styles.DropdownIcon src={dropdown} onClick={toggleDropdown} />
+
+              {isDropdownOpen && (
+                <Styles.DropdownBox>
+                  <Styles.DropdownMenu>
+                    <Styles.DropdownItem>내 벨로그</Styles.DropdownItem>
+                    <Styles.DropdownItem>설정</Styles.DropdownItem>
+                    <Styles.DropdownItem onClick={handleLogout}>로그아웃</Styles.DropdownItem>
+                  </Styles.DropdownMenu>
+                </Styles.DropdownBox>
+              )}
+            </Styles.RightSection>
           ) : (
-            <RightSection>
-              <NoticeIcon src={notification} onClick={openModal} />
-              <SearchIcon src={search} />
-              <LoginButton onClick={openModal}>로그인</LoginButton>
+            <Styles.RightSection>
+              <Styles.NoticeIcon src={notification} />
+              <Styles.SearchIcon src={search} />
+              <Styles.LoginButton onClick={openLoginModal}>로그인</Styles.LoginButton>
               {isModalOpen && modalType === "login" && (
                 <LoginModal
-                  closeModal={closeModal}
+                  closeModal={handleCloseModal}
                   openSignupModal={openSignupModal}
                 />
               )}
 
               {isModalOpen && modalType === "signup" && (
                 <SignupModal
-                  closeModal={closeModal}
+                  closeModal={handleCloseModal}
                   openLoginModal={openLoginModal}
                 />
               )}
-            </RightSection>
+            </Styles.RightSection>
           )}
-        </HeaderBox>
-      </HeaderContainer>
+        </Styles.HeaderBox>
+      </Styles.HeaderContainer>
     </React.Fragment>
   );
 }
 
 export default Header;
-
-const HeaderContainer = styled.div`
-  padding: 12px;
-`;
-
-const HeaderBox = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-`;
-
-const LogoImg = styled.img`
-  width: 70px;
-  cursor: pointer;
-`;
-
-const RightSection = styled.div`
-  display: flex;
-  align-items: center;
-`;
-
-const NoticeIcon = styled.img`
-  width: 23px;
-  margin-right: 10px;
-  cursor: pointer;
-  padding: 10px;
-  border-radius: 50%;
-  transition: background-color 0.125s;
-
-  &:hover {
-    background-color: rgba(0, 0, 0, 0.1);
-  }
-`;
-
-const SearchIcon = styled.img`
-  width: 23px;
-  margin-right: 10px;
-  cursor: pointer;
-  padding: 10px;
-  border-radius: 50%;
-  transition: background-color 0.125s;
-
-  &:hover {
-    background-color: rgba(0, 0, 0, 0.1);
-  }
-`;
-
-const WriteButton = styled.button`
-  height: 2rem;
-  padding: 1px 16px;
-  font-size: 1rem;
-  font-weight: 700;
-  border: 1px solid #212529;
-  border-radius: 1rem;
-  background-color: #fff;
-  color: #212529;
-  transition: all 0.25s;
-  cursor: pointer;
-  margin-right: 20px;
-
-  &: hover {
-    background-color: #212529;
-    color: #fff;
-  }
-`;
-
-const ProfileIcon = styled.img`
-  width: 40px;
-  border-radius: 50%;
-  cursor: pointer;
-`;
-
-const DropdownIcon = styled.img`
-  width: 30px;
-  cursor: pointer;
-`;
-
-const LoginButton = styled.button`
-  height: 2rem;
-  padding-left: 1rem;
-  padding-right: 1rem;
-  border-radius: 1rem;
-  font-size: 1rem;
-  background-color: #212529;
-  border: none;
-  color: #ffffff;
-  cursor: pointer;
-
-  &:hover {
-    background-color: #4a4a4a;
-    transition: all 0.125s ease-in;
-  }
-`;

@@ -1,8 +1,9 @@
-import React from 'react'
+import React from 'react';
 import PostCard from '../components/PostCard';
 import { MainContianer, PostcardGrid } from '../styles/Styles';
 import { useSelector } from 'react-redux';
 import NavBar from '../components/NavBar';
+
 
 
 function MainPage() {

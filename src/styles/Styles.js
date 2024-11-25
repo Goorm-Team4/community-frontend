@@ -6,8 +6,12 @@ export const GlobalStyle = createGlobalStyle`
     --gray: #f1f3f5;
     --background-black: #212121;
     --background-white: #fff;
-    --text: #ececec;
+    --title: #212529;
+    --text1: #ececec;
+    --text2: #868e96;
     --border: #e0e0e0;
+    --primary-green1: #20c997;
+    --primary-green2: #12b886;
   }
 
   * {
