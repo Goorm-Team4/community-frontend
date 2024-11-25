@@ -13,6 +13,8 @@ export const GlobalStyle = createGlobalStyle`
   * {
     padding: 0;
     margin: 0;
+    border: none;
+    background: none;
     box-sizing: border-box;
     text-decoration: none;
   }
@@ -20,12 +22,15 @@ export const GlobalStyle = createGlobalStyle`
   div {
     background-color: ${(props) => (props.$active ? 'var(--background-white)' : 'var(--background-black)')}
   }
+
   body {
     background-color: ${(props) => (props.$active ? 'var(--background-white)' : 'var(--gray)')}
   }
+  
   li {
     background-color: ${(props) => (props.$active ? 'var(--background-white)' : 'var(--gray)')}
   }
+
 `
 
 export const MainContianer = styled.ul`
@@ -78,17 +83,15 @@ export const Navbar = styled.nav`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem 2rem;
+  padding: 1rem 0rem;
   color : ${(props) => (props.$active ? '#333' : '#ffffff')};
 `;
 
 export const LeftNavbar = styled.div`
   align-items: center;
-  padding: 1rem 2rem;
 `;
 export const RightNavbar = styled.div`
   align-items: center;
-  padding: 1rem 2rem;
 `;
 
 export const NavItems = styled.div`
@@ -97,7 +100,7 @@ export const NavItems = styled.div`
   gap: 1rem;
 `;
 
-export const NavItem = styled.a`
+export const NavItem = styled.button`
   text-decoration: none;
   color: inherit;
   font-weight: bold;
