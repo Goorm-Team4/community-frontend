@@ -2,6 +2,7 @@ import React from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { Navbar, LeftNavbar, RightNavbar, NavItem, NavItems, ToggleContainer } from '../styles/Styles'
 import { toggle } from '../redux/darkModeSlice';
+import { dateSort, favoriteSort } from '../redux/listSlice';
 
 export default function NavBar() {
 
@@ -12,19 +13,16 @@ export default function NavBar() {
     <Navbar $active={isActive}>
       <LeftNavbar>
         <NavItems>
-          <NavItem href="#">전체</NavItem>
-          <NavItem href="#">최신</NavItem>
-          <NavItem href="#">인기</NavItem>
+          <NavItem >전체</NavItem>
+          <NavItem onClick={() => dispatch(dateSort())}>최신</NavItem>
+          <NavItem onClick={() => dispatch(favoriteSort())}>인기</NavItem>
         </NavItems>
       </LeftNavbar>
       <RightNavbar>
-      <NavItems>
-          <NavItem href="#">
-          <ToggleContainer $active={isActive} onClick={() => dispatch(toggle())}>
-      { isActive ? '다크' : '화이트'}
-    </ToggleContainer>
-          </NavItem>
-          <NavItem href="#">로그인</NavItem>
+        <NavItems>
+            <ToggleContainer $active={isActive} onClick={() => dispatch(toggle())}>
+              {isActive ? '다크' : '화이트'}
+            </ToggleContainer>
         </NavItems>
       </RightNavbar>
     </Navbar>

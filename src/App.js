@@ -1,13 +1,12 @@
 import React, { useEffect } from "react";
 import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
 
-import Loading from "./components/Loading";
-import MainPage from "./pages/MainPage";
-import PostPage from "./pages/PostPage";
-import NavBar from "./components/NavBar";
-import { useDispatch, useSelector } from "react-redux";
-import { GlobalStyle } from "./styles/Styles";
+import { GlobalStyle } from './styles/Styles';
+import MainPage from './pages/MainPage';
+import PostPage from './pages/PostPage';
 import Header from "./components/Header";
+import Loading from "./components/Loading";
+import { useDispatch, useSelector } from "react-redux";
 import { storeLogin } from "./services/auth";
 
 function App() {
@@ -25,10 +24,9 @@ function App() {
       <GlobalStyle $active={isActive} />
       <Header></Header>
       <Loading />
-      <NavBar></NavBar>
       <Routes>
         <Route path="/" element={<MainPage />} />
-        <Route path="/post" element={<PostPage />} />
+        <Route path="/post/:id" element={<PostPage />} />
       </Routes>
     </React.Fragment>
   );
