@@ -3,12 +3,17 @@ import styled, { createGlobalStyle } from "styled-components";
 export const GlobalStyle = createGlobalStyle`
 
   :root {
+    --white: #fff;
     --gray: #f1f3f5;
+    --gray1: #f8f9fa;
+    --gray2: #ADB5BD;
     --background-black: #212121;
-    --background-white: #fff;
+    --background-black2: #868E96;
+    --background-white: #f5f5f5;
     --title: #212529;
     --text1: #ececec;
     --text2: #868e96;
+    --text3: #212529;
     --border: #e0e0e0;
     --primary-green1: #20c997;
     --primary-green2: #12b886;
@@ -24,7 +29,7 @@ export const GlobalStyle = createGlobalStyle`
   }
 
   div {
-    background-color: ${(props) => (props.$active ? 'var(--background-white)' : 'var(--background-black)')}
+    background-color: ${(props) => (props.$active ? 'var(--background-white)' : 'var(--background-black2)')}
   }
 
   body {
@@ -108,11 +113,12 @@ export const NavItem = styled.button`
   text-decoration: none;
   color: inherit;
   font-weight: bold;
+  cursor: pointer;
 `;
 
-export const ToggleContainer = styled.button`
-  background-color: ${(props) => (props.$active ? '#ffffff' : '#333')}; // 켜짐: 초록, 꺼짐: 회색
-  color: ${(props) => (props.$active ? '#ccc' : '#ffffff')};
+export const ToggleContainer = styled.button` // 켜짐: 초록, 꺼짐: 회색
+  color: ${(props) => (props.$active ? 'var(--text3)' : '#ffffff')};
+  font-weight: 400;
   border: none;
   font-size: 16px;
   cursor: pointer;
