@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import defaultProfile from "../assets/userProfile.png";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchProfile, updateProfile } from "../services/auth";
+import { fetchProfile, updateProfile, checkUsername } from "../services/auth";
 import { updateUser } from "../redux/userSlice";
 
 function MyPage() {
@@ -25,6 +25,9 @@ function MyPage() {
     username: false,
     profileImage: false,
   });
+
+  const [isUsernameChecked, setIsUsernameChecked] = useState(false);
+  const [msg, setMsg] = useState("");
 
   // 1. 프로필 조회 API 호출
   useEffect(() => {
@@ -113,6 +116,33 @@ function MyPage() {
     setPreviewImage(defaultProfile);
   };
 
+    const handleUsernameChange = (e) => {
+    setEditedUsername(e.target.value);
+    setMsg(""); // 입력이 변경될 때 메시지 초기화
+    setIsUsernameChecked(false); // 중복 확인 초기화
+  };
+
+  const handleCheckNickname = async (e) => {
+    e.preventDefault();
+  
+    try {
+      const response = await checkUsername(editedUsername);
+      if (response.result.duplicate === false) {
+        setIsUsernameChecked(true);
+        setMsg("사용 가능한 닉네임입니다.");
+        console.log(response.result)
+      } else {
+        setIsUsernameChecked(false);
+        setMsg("이미 사용 중인 닉네임입니다.");
+        console.log(response.result)
+      }
+    } catch (error) {
+      setMsg("닉네임 중복 확인 실패");
+      console.error(
+        "닉네임 중복확인 실패", error.response?.message)
+    }
+  };
+
   return (
     <React.Fragment>
       <Container>
@@ -137,13 +167,24 @@ function MyPage() {
           <NameLabel>
             {isEditing.username ? (
               <>
+              <Input>
                 <NameInput
                   type="text"
                   value={editedUsername}
-                  onChange={(e) => setEditedUsername(e.target.value)}
+                  onChange={handleUsernameChange}
                 />
+                {msg && <Message>{msg}</Message>}
+              </Input>
                 <ButtonBox>
-                  <SaveButton onClick={handleSaveChanges}>저장</SaveButton>
+                  <SaveButton 
+                  onClick={handleCheckNickname}
+                  isUsernameChecked={isUsernameChecked}>확인</SaveButton>
+                  <SaveButton 
+                  onClick={handleSaveChanges}
+                  disabled={!isUsernameChecked}
+                  >
+                    저장
+                  </SaveButton>
                   <CancelButton
                     onClick={() => {
                       setEditedUsername(username);
@@ -265,8 +306,19 @@ const NameLabel = styled.div`
   margin-bottom: 2rem;
 `;
 
+const Input = styled.div`
+ display: flex;
+ flex-direction: column;
+`;
+
 const NameInput = styled.input`
   font-size: 1.5rem;
+`;
+
+const Message = styled.span`
+  color: ${(props) => (props.isUsernameChecked ? "black" : "red")};
+  font-size: 14px;
+  margin-top: 14px;
 `;
 
 const ButtonBox = styled.div`
@@ -292,6 +344,7 @@ const EmailTitle = styled.h2`
   font-size: 1.3rem;
   padding-top: 20px;
 `;
+
 const Email = styled.span`
   font-size: 1rem;
   line-height: 1.5;
