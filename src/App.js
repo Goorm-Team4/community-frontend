@@ -1,6 +1,8 @@
 import React, { useEffect } from "react";
 import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
 
+import ProtectedRoute from "./components/ProtectedRoute";
+import MyPage from "./pages/MyPage";
 import { GlobalStyle } from './styles/Styles';
 import MainPage from './pages/MainPage';
 import PostPage from './pages/PostPage';
@@ -26,6 +28,11 @@ function App() {
       <Loading />
       <Routes>
         <Route path="/" element={<MainPage />} />
+        <Route path="/mypage" element={
+          <ProtectedRoute>
+            <MyPage />
+          </ProtectedRoute>
+        }/>
         <Route path="/post/:id" element={<PostPage />} />
       </Routes>
     </React.Fragment>

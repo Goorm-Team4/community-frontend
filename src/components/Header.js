@@ -49,7 +49,7 @@ function Header() {
     localStorage.removeItem("accessToken");
     dispatch(logoutUser());
     navigate("/");
-  }
+  };
 
   return (
     <React.Fragment>
@@ -69,7 +69,7 @@ function Header() {
                 <Styles.DropdownBox>
                   <Styles.DropdownMenu>
                     <Styles.DropdownItem>내 벨로그</Styles.DropdownItem>
-                    <Styles.DropdownItem>설정</Styles.DropdownItem>
+                    <Styles.DropdownItem onClick={() => navigate("/mypage")}>설정</Styles.DropdownItem>
                     <Styles.DropdownItem onClick={handleLogout}>로그아웃</Styles.DropdownItem>
                   </Styles.DropdownMenu>
                 </Styles.DropdownBox>

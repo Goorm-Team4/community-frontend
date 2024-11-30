@@ -3,34 +3,34 @@ import { createSlice } from "@reduxjs/toolkit";
 export const userSlice = createSlice({
     name: "user",
     initialState: {
-        email: "",
-        username: "",
+        email: null,
+        username: null,
         isLoggedIn: false,
-        accessToken: "",
-        profileImage: "",
+        accessToken: null,
+        profileImageUrl: null,
     },
     reducers: {
-        signupUser: (state, action) => {
-            const { email, username, profileImage } = action.payload;
-            state.email = email;
-            state.username = username;
-            state.profileImage = profileImage;
-        },
         loginUser: (state, action) => {
             state.email = action.payload.email;
             state.username = action.payload.username;
+            state.profileImageUrl = action.payload.profileImageUrl;
             state.accessToken = action.payload.accessToken;
             state.isLoggedIn = true;
         },
         logoutUser: (state) => {
-            state.email = "";
-            state.username = "";
+            state.email = null;
+            state.username = null;
+            state.profileImageUrl = null;
             state.isLoggedIn = false;
-            state.accessToken = "";
-            state.profileImage = "";
+            state.accessToken = null;
+          },
+        updateUser: (state, action) => {
+            const { username, profileImageUrl } = action.payload || {};
+            if (username) state.username = username;
+            if (profileImageUrl) state.profileImageUrl = profileImageUrl;
         },
     },
 });
 
-export const { signupUser, loginUser, logoutUser } = userSlice.actions;
+export const { loginUser, logoutUser, updateUser } = userSlice.actions;
 export default userSlice.reducer;

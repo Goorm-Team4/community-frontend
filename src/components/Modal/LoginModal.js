@@ -40,7 +40,10 @@ function LoginModal({ closeModal, openSignupModal }) {
       if (response.code === "200") {
         const accessToken = response.result.accessToken;
         localStorage.setItem("accessToken", accessToken);
-        dispatch(loginUser({ accessToken }));
+        dispatch(loginUser({ 
+          email: response.result.email,
+          username: response.result.username,
+          accessToken: accessToken }));
         
         alert("로그인 성공");
         navigate("/");
