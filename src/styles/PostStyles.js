@@ -87,7 +87,7 @@ export const PostCommentArea = styled.div`
     border-radius: 4px;
     min-height: 6.125rem;
     font-size: 1rem;
-    color: gray;
+    color: var(--gray3);;
     line-height: 1.75;
     background: white;
   }
@@ -145,7 +145,7 @@ export const PostCommentPorfile = styled.div`
 
     .date {
       margin-top: 0.5rem;
-      color: gray;
+      color: var(--gray3);
       font-size: 0.875rem;
     }
 `

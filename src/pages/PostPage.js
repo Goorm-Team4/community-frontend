@@ -1,20 +1,43 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import * as Styles from '../styles/PostStyles'
 import TempImg from '../assets/image.png'
+import { useParams } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux';
+import { contentRead } from '../redux/contentSlice';
 
 function PostPage() {
+  // const { id } = useParams();  
+  // const dispatch = useDispatch();
+  const { content } = useSelector((state) => state.content);
+  const isActive = useSelector((state) => state.darkMode.darkModeActive);
+
+  // useEffect(() => {
+  //   dispatch(contentRead(id)); 
+  // }, [id, dispatch])
+  const getMonthDiff = () => {
+    const today = new Date();
+    const createContentDay = new Date(content.date);
+
+    const diffDate = today.getTime() - createContentDay.getTime();
+
+    return Math.floor(Math.abs(diffDate / (1000 * 60 * 60 * 24)));
+  }
+
   return (
-    <Styles.PostPage>
+    <Styles.PostPage $active={isActive}>
       <Styles.PostHeader>
-        <h1>velog dashboard 를 살려주세요..! (수정됨)</h1>
+        <h1>
+          {content.title}
+        </h1>
         <Styles.Info>
-          <span className='username'>이름</span>
+          <span className='username'>{content.writer}</span>
           <span className='separator'>·</span>
-          <span>7일 전</span>
+          <span>{getMonthDiff()}일 전</span>
         </Styles.Info>
         <img src={TempImg} alt='title img'></img>
       </Styles.PostHeader>
       <Styles.PostContent>
+        {content.content}
         velog dashboard 요약
         V.D. 는 취합된 통계기능이 부족한 velog 에 3'rd party web page 이다. token 값으로 velog 게시글의 모든 통계를 한 눈에 볼 수 있게 제공하는 페이지였다. (귀여운 예시 영상 참조)
 

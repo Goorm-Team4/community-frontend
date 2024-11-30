@@ -4,10 +4,11 @@ export const Postcard = styled.li`
   display: flex;
   flex-flow: column nowrap;
   width: 100%;
-  background: blue;
   border-radius: 4px;
   box-shadow: 0 4px 16px 0 rgba(0,0,0,.04);
   transition: box-shadow .25s ease-in,transform .25s ease-in;
+  background-color: ${(props) => (props.$active ? 'var(--white)' : 'var(--gray2)')};
+
   &:hover {
       transform: translateY(-8px);
       box-shadow: 0 12px 20px 0 rgba(0,0,0,.08);
@@ -18,7 +19,7 @@ export const Postcard = styled.li`
 
 `;
 
-export const PostcardImage = styled.a`
+export const PostcardImage = styled.div`
   display: block;
   color: inherit;
   text-decoration: none;
@@ -40,6 +41,7 @@ export const PostcardContent = styled.div`
     display: flex;
     flex: 1 1;
     flex-direction: column;
+    background-color: inherit;
 
     a {
       display: block;
@@ -62,7 +64,8 @@ export const PostcardContentSubInfo = styled.div`
   margin-top: auto;
   font-size: .75rem;
   line-height: 1.5;
-  color: gray;
+  color: var(--gray3);;
+  background-color: inherit;
 
   .separator {
     margin-left: .25rem;
@@ -88,6 +91,7 @@ export const PostcardFooter = styled.div`
   font-size: .75rem;
   line-height: 1.5;
   justify-content: space-between;
+  background-color: inherit;
 
   a {
     text-decoration: none;
@@ -104,7 +108,7 @@ export const PostcardFooter = styled.div`
         }
 
         span {
-            color: gray;
+            color: var(--gray3);;
             b {
               color: black;
             }
@@ -116,6 +120,7 @@ export const PostcardFooterLikes = styled.div`
   display: flex;
   align-items: center;
   color: black;
+  background-color: inherit;
 
   svg {
     width: .75rem;
