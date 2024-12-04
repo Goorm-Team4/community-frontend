@@ -1,5 +1,4 @@
 import React, { useState, useRef, useCallback } from "react";
-import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import * as Styles from "../../styles/ModalStyles";
 import {
@@ -17,9 +16,9 @@ import kakaoIcon from "../../assets/kakaoIcon.svg";
 import defaultProfile from "../../assets/userProfile.png";
 import useOnClickOutside from "../../hooks/useOnClickOutside";
 import Timer from "../Timer";
-import { loginUser } from "../../redux/userSlice";
+import { openModal, closeModal } from "../../redux/modalSlice";
 
-function SignupModal({ closeModal, openLoginModal }) {
+function SignupModal() {
   const [step, setStep] = useState(1);
   const [email, setEmail] = useState("");
   const [codeValue, setCodeValue] = useState("");
@@ -37,11 +36,13 @@ function SignupModal({ closeModal, openLoginModal }) {
   const [isUsernameChecked, setIsUsernameChecked] = useState(false);
   const [msg, setMsg] = useState("");
 
-  const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  const handleClose = () => { dispatch(closeModal()); };
+  const openLoginModal = () => { dispatch(openModal("login")); };
+
   const modalRef = useRef();
-  useOnClickOutside(modalRef, closeModal);
+  useOnClickOutside(modalRef, handleClose);
 
   const handleProfileImage = (e) => {
     if (e.target.files[0]) {
@@ -124,10 +125,9 @@ function SignupModal({ closeModal, openLoginModal }) {
       const response = await emailSignup(info, profileImage);
 
       if (response.code === "200") {
-        dispatch(loginUser({ email, username, profileImage }));
         alert("회원가입이 완료되었습니다.");
-        dispatch(closeModal);
-        navigate("/");
+        dispatch(closeModal());
+        dispatch(openModal("login"));
       } else {
         setMsg("회원가입에 실패했습니다. 다시 시도해주세요.");
       }
@@ -177,7 +177,7 @@ function SignupModal({ closeModal, openLoginModal }) {
           <Styles.SignupSection>
             <Styles.CloseButton>
               <img
-                onClick={closeModal}
+                onClick={handleClose}
                 src={closeButton}
                 alt="closeBtn"
                 style={{ cursor: "pointer" }}

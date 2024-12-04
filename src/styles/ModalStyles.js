@@ -98,6 +98,13 @@ export const SignupSection = styled.div`
   padding-top: 10px;
 `;
 
+export const PasswordSection = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding: 24px;
+  flex: 1;
+`;
+
 export const CloseButton = styled.div`
   display: flex;
   justify-content: flex-end;

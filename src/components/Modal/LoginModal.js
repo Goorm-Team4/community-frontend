@@ -10,17 +10,24 @@ import useOnClickOutside from "../../hooks/useOnClickOutside";
 import { emailLogin } from "../../services/auth";
 import { loginUser } from "../../redux/userSlice";
 import { useNavigate } from "react-router-dom";
+import { closeModal, openModal } from "../../redux/modalSlice";
 
-function LoginModal({ closeModal, openSignupModal }) {
+function LoginModal() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  const handleClose = () => { dispatch(closeModal()); };
+
   // 모달 영역 외부 클릭 시 닫힘
   const modalRef = useRef();
-  useOnClickOutside(modalRef, closeModal);
+  useOnClickOutside(modalRef, handleClose);
+
+  const openSignupModal = () => {
+    dispatch(openModal("signup"));
+  };
 
   const kakaoAuthRedirect = () => {
     window.location.href = `${process.env.REACT_APP_API_BASE_URL}/oauth2/authorization/kakao`;
@@ -70,7 +77,7 @@ function LoginModal({ closeModal, openSignupModal }) {
           <Styles.LoginSection>
             <Styles.CloseButton>
               <img
-                onClick={closeModal}
+                onClick={handleClose}
                 src={closeButton}
                 alt="closeBtn"
                 style={{ cursor: "pointer" }}

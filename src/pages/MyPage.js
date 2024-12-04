@@ -4,6 +4,8 @@ import defaultProfile from "../assets/userProfile.png";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProfile, updateProfile, checkUsername } from "../services/auth";
 import { updateUser } from "../redux/userSlice";
+import { openModal } from "../redux/modalSlice";
+import TempPasswordModal from "../components/Modal/TempPasswordModal";
 
 function MyPage() {
   const user = useSelector((state) => state.user);
@@ -28,6 +30,8 @@ function MyPage() {
 
   const [isUsernameChecked, setIsUsernameChecked] = useState(false);
   const [msg, setMsg] = useState("");
+
+  const { isModalOpen, modalType } = useSelector((state) => state.modal);
 
   // 1. 프로필 조회 API 호출
   useEffect(() => {
@@ -116,7 +120,7 @@ function MyPage() {
     setPreviewImage(defaultProfile);
   };
 
-    const handleUsernameChange = (e) => {
+  const handleUsernameChange = (e) => {
     setEditedUsername(e.target.value);
     setMsg(""); // 입력이 변경될 때 메시지 초기화
     setIsUsernameChecked(false); // 중복 확인 초기화
@@ -124,23 +128,26 @@ function MyPage() {
 
   const handleCheckNickname = async (e) => {
     e.preventDefault();
-  
+
     try {
       const response = await checkUsername(editedUsername);
       if (response.result.duplicate === false) {
         setIsUsernameChecked(true);
         setMsg("사용 가능한 닉네임입니다.");
-        console.log(response.result)
+        console.log(response.result);
       } else {
         setIsUsernameChecked(false);
         setMsg("이미 사용 중인 닉네임입니다.");
-        console.log(response.result)
+        console.log(response.result);
       }
     } catch (error) {
       setMsg("닉네임 중복 확인 실패");
-      console.error(
-        "닉네임 중복확인 실패", error.response?.message)
+      console.error("닉네임 중복확인 실패", error.response?.message);
     }
+  };
+
+  const openTempPasswordModal = () => {
+    dispatch(openModal("tempPassword"));
   };
 
   return (
@@ -167,21 +174,24 @@ function MyPage() {
           <NameLabel>
             {isEditing.username ? (
               <>
-              <Input>
-                <NameInput
-                  type="text"
-                  value={editedUsername}
-                  onChange={handleUsernameChange}
-                />
-                {msg && <Message>{msg}</Message>}
-              </Input>
+                <Input>
+                  <NameInput
+                    type="text"
+                    value={editedUsername}
+                    onChange={handleUsernameChange}
+                  />
+                  {msg && <Message>{msg}</Message>}
+                </Input>
                 <ButtonBox>
-                  <SaveButton 
-                  onClick={handleCheckNickname}
-                  isUsernameChecked={isUsernameChecked}>확인</SaveButton>
-                  <SaveButton 
-                  onClick={handleSaveChanges}
-                  disabled={!isUsernameChecked}
+                  <SaveButton
+                    onClick={handleCheckNickname}
+                    isUsernameChecked={isUsernameChecked}
+                  >
+                    확인
+                  </SaveButton>
+                  <SaveButton
+                    onClick={handleSaveChanges}
+                    disabled={!isUsernameChecked}
                   >
                     저장
                   </SaveButton>
@@ -221,7 +231,8 @@ function MyPage() {
         <ActionSection>
           <ActionTitle>비밀번호 변경 및 회원 탈퇴</ActionTitle>
           <ActionButtonBox>
-            <PwButton>비밀번호 변경</PwButton>
+            <PwButton onClick={openTempPasswordModal}>비밀번호 변경</PwButton>
+            {isModalOpen && modalType === "tempPassword" && <TempPasswordModal />}
             <DelButton>회원 탈퇴</DelButton>
           </ActionButtonBox>
           <SectionFooter>
@@ -307,8 +318,8 @@ const NameLabel = styled.div`
 `;
 
 const Input = styled.div`
- display: flex;
- flex-direction: column;
+  display: flex;
+  flex-direction: column;
 `;
 
 const NameInput = styled.input`

@@ -4,7 +4,7 @@ const modalSlice = createSlice({
     name: "modal",
     initialState: {
         isModalOpen: false,
-        modalType: "login",
+        modalType: null,
     },
     reducers: {
         openModal: (state, action) => {
@@ -16,6 +16,7 @@ const modalSlice = createSlice({
         },
         closeModal: (state) => {
             state.isModalOpen = false;
+            state.modalType = null;
         },
     },
 });

@@ -1,14 +1,16 @@
 import React, { useEffect } from "react";
 import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { GlobalStyle } from "./styles/Styles";
 
 import ProtectedRoute from "./components/ProtectedRoute";
 import MyPage from "./pages/MyPage";
-import { GlobalStyle } from './styles/Styles';
 import MainPage from './pages/MainPage';
 import PostPage from './pages/PostPage';
 import Header from "./components/Header";
 import Loading from "./components/Loading";
-import { useDispatch, useSelector } from "react-redux";
+import TempLoginModal from "./components/Modal/TempLoginModal";
+import ChangePasswordModal from "./components/Modal/ChangePasswordModal";
 import { storeLogin } from "./services/auth";
 
 function App() {
@@ -16,6 +18,7 @@ function App() {
   const location = useLocation();
   const navigate = useNavigate();
   const isActive = useSelector((state) => state.darkMode.darkModeActive);
+  const { isModalOpen, modalType } = useSelector((state) => state.modal);
 
   useEffect(() => {
     storeLogin(dispatch, location, navigate);
@@ -35,6 +38,13 @@ function App() {
         }/>
         <Route path="/post/:id" element={<PostPage />} />
       </Routes>
+
+      {isModalOpen && (
+        <>
+          {modalType === "tempLogin" && <TempLoginModal />}
+          {modalType === "changePassword" && <ChangePasswordModal />}
+        </>
+      )}
     </React.Fragment>
   );
 }
