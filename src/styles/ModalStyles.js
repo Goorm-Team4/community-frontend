@@ -16,10 +16,11 @@ export const ModalOverlay = styled.div`
 export const Container = styled.div`
   display: flex;
   flex-direction: row;
+  box-sizing: content-box;
   width: 606px;
-  height: 530px;
-  padding-bottom: 48px;
-  background-color: var(--background-white);
+  height: 580px;
+  margin-bottom: 48px;
+  background-color: #f8f9fa;
   box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.09);
 `;
 
@@ -29,7 +30,7 @@ export const WelcomeSection = styled.div`
   justify-content: center;
   align-items: center;
   width: 216px;
-  height: 530px;
+  height: 580px;
   padding: 24px;
   background-color: #f8f9fa;
 `;
@@ -84,7 +85,7 @@ export const ProfileInput = styled.input`
 
 export const LoginSection = styled.div`
   display: flex;
-  height: 530px;
+  height: 580px;
   flex: 1 1;
   flex-direction: column;
   padding: 24px;

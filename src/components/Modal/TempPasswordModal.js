@@ -7,6 +7,7 @@ import { useDispatch } from "react-redux";
 import closeButton from "../../assets/closeButton.svg";
 import { logoutUser } from "../../redux/userSlice";
 import { changePasswordStatus } from "../../redux/userSlice";
+import { clearLoading, setLoading } from "../../redux/loadingSlice";
 
 function TempPasswordModal() {
   const [email, setEmail] = useState("");
@@ -23,6 +24,7 @@ function TempPasswordModal() {
 
     const token = localStorage.getItem("accessToken");
 
+    dispatch(setLoading());
     try {
       const response = await axios.post(
         `${process.env.REACT_APP_API_BASE_URL}/api/v1/auth/password/temp`,
@@ -34,6 +36,7 @@ function TempPasswordModal() {
           },
         }
       );
+      dispatch(clearLoading());
       console.log("임시 비밀번호 요청 성공: ", response.data);
       alert("임시 비밀번호가 전송되었습니다. 다시 로그인해주세요.");
 
@@ -46,6 +49,7 @@ function TempPasswordModal() {
       dispatch(openModal("tempLogin"));
 
     } catch (error) {
+      dispatch(clearLoading());
       console.error(
         "임시 비밀번호 요청 실패: ",
         error.response?.data || error.message

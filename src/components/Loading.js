@@ -38,4 +38,5 @@ const NoticeSection = styled.div`
     font: 1rem 'Noto Sans KR';
     text-align: center;
     font-weight: bold;
+    background-color: transparent;
 `;
