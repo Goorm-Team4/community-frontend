@@ -8,6 +8,7 @@ export const userSlice = createSlice({
         isLoggedIn: false,
         accessToken: null,
         profileImageUrl: null,
+        isPasswordChange: false, // 비밀번호 변경 상태
     },
     reducers: {
         loginUser: (state, action) => {
@@ -23,14 +24,18 @@ export const userSlice = createSlice({
             state.profileImageUrl = null;
             state.isLoggedIn = false;
             state.accessToken = null;
+            state.isPasswordChange = false;
           },
         updateUser: (state, action) => {
             const { username, profileImageUrl } = action.payload || {};
             if (username) state.username = username;
             if (profileImageUrl) state.profileImageUrl = profileImageUrl;
         },
+        changePasswordStatus: (state, action) => {
+            state.isPasswordChange = action.payload;
+        },
     },
 });
 
-export const { loginUser, logoutUser, updateUser } = userSlice.actions;
+export const { loginUser, logoutUser, updateUser, changePasswordStatus } = userSlice.actions;
 export default userSlice.reducer;

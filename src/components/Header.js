@@ -11,9 +11,9 @@ import dropdown from "../assets/dropdown.svg";
 import LoginModal from "./Modal/LoginModal";
 import SignupModal from "./Modal/SignupModal";
 import { useDispatch, useSelector } from "react-redux";
-import { openModal, closeModal } from "../redux/modalSlice";
-import { useDebounce } from "../hooks/useDebounce";
+import { openModal } from "../redux/modalSlice";
 import { logoutUser } from "../redux/userSlice";
+
 
 function Header() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -24,21 +24,8 @@ function Header() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const debouncedLoginModal = useDebounce("login", 500);
-  const debouncedSignupModal = useDebounce("signup", 500);
-
   const openLoginModal = () => {
-    dispatch(openModal(debouncedLoginModal));
-  };
-
-  const openSignupModal = () => {
-    dispatch(openModal(debouncedSignupModal));
-  };
-
-  const handleCloseModal = () => {
-    if (isModalOpen) {
-      dispatch(closeModal());
-    }
+    dispatch(openModal("login"));
   };
 
   const toggleDropdown = () => {
@@ -80,19 +67,8 @@ function Header() {
               <Styles.NoticeIcon src={notification} />
               <Styles.SearchIcon src={search} />
               <Styles.LoginButton onClick={openLoginModal}>로그인</Styles.LoginButton>
-              {isModalOpen && modalType === "login" && (
-                <LoginModal
-                  closeModal={handleCloseModal}
-                  openSignupModal={openSignupModal}
-                />
-              )}
-
-              {isModalOpen && modalType === "signup" && (
-                <SignupModal
-                  closeModal={handleCloseModal}
-                  openLoginModal={openLoginModal}
-                />
-              )}
+              {isModalOpen && modalType === "login" && <LoginModal />}
+              {isModalOpen && modalType === "signup" && <SignupModal />}
             </Styles.RightSection>
           )}
         </Styles.HeaderBox>

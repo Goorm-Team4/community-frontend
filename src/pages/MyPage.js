@@ -1,9 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
-import styled from "styled-components";
+import * as Styles from "../styles/MyPageStyles";
 import defaultProfile from "../assets/userProfile.png";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProfile, updateProfile, checkUsername } from "../services/auth";
 import { updateUser } from "../redux/userSlice";
+import { openModal } from "../redux/modalSlice";
+import TempPasswordModal from "../components/Modal/TempPasswordModal";
 
 function MyPage() {
   const user = useSelector((state) => state.user);
@@ -28,6 +30,8 @@ function MyPage() {
 
   const [isUsernameChecked, setIsUsernameChecked] = useState(false);
   const [msg, setMsg] = useState("");
+
+  const { isModalOpen, modalType } = useSelector((state) => state.modal);
 
   // 1. 프로필 조회 API 호출
   useEffect(() => {
@@ -116,7 +120,7 @@ function MyPage() {
     setPreviewImage(defaultProfile);
   };
 
-    const handleUsernameChange = (e) => {
+  const handleUsernameChange = (e) => {
     setEditedUsername(e.target.value);
     setMsg(""); // 입력이 변경될 때 메시지 초기화
     setIsUsernameChecked(false); // 중복 확인 초기화
@@ -124,300 +128,120 @@ function MyPage() {
 
   const handleCheckNickname = async (e) => {
     e.preventDefault();
-  
+
     try {
       const response = await checkUsername(editedUsername);
       if (response.result.duplicate === false) {
         setIsUsernameChecked(true);
         setMsg("사용 가능한 닉네임입니다.");
-        console.log(response.result)
+        console.log(response.result);
       } else {
         setIsUsernameChecked(false);
         setMsg("이미 사용 중인 닉네임입니다.");
-        console.log(response.result)
+        console.log(response.result);
       }
     } catch (error) {
       setMsg("닉네임 중복 확인 실패");
-      console.error(
-        "닉네임 중복확인 실패", error.response?.message)
+      console.error("닉네임 중복확인 실패", error.response?.message);
     }
+  };
+
+  const openTempPasswordModal = () => {
+    dispatch(openModal("tempPassword"));
   };
 
   return (
     <React.Fragment>
-      <Container>
-        <ProfileSection>
-          <ProfileLabel htmlFor="profileImage">
-            <Preview src={previewImage || defaultProfile} alt="미리보기" />
-            <ProfileInput
+      <Styles.Container>
+        <Styles.ProfileSection>
+          <Styles.ProfileLabel htmlFor="profileImage">
+            <Styles.Preview src={previewImage || defaultProfile} alt="미리보기" />
+            <Styles.ProfileInput
               type="file"
               accept="image/*"
               id="profileImage"
               ref={fileInputRef}
               onChange={handleImageUpload}
             />
-          </ProfileLabel>
-          <ProfileButton onClick={() => fileInputRef.current.click()}>
+          </Styles.ProfileLabel>
+          <Styles.ProfileButton onClick={() => fileInputRef.current.click()}>
             이미지 업로드
-          </ProfileButton>
-          <ProfileButton onClick={handleImageReset}>이미지 제거</ProfileButton>
-        </ProfileSection>
+          </Styles.ProfileButton>
+          <Styles.ProfileButton onClick={handleImageReset}>이미지 제거</Styles.ProfileButton>
+        </Styles.ProfileSection>
 
-        <UserNameSection>
-          <NameLabel>
+        <Styles.UserNameSection>
+          <Styles.NameLabel>
             {isEditing.username ? (
               <>
-              <Input>
-                <NameInput
-                  type="text"
-                  value={editedUsername}
-                  onChange={handleUsernameChange}
-                />
-                {msg && <Message>{msg}</Message>}
-              </Input>
-                <ButtonBox>
-                  <SaveButton 
-                  onClick={handleCheckNickname}
-                  isUsernameChecked={isUsernameChecked}>확인</SaveButton>
-                  <SaveButton 
-                  onClick={handleSaveChanges}
-                  disabled={!isUsernameChecked}
+                <Styles.Input>
+                  <Styles.NameInput
+                    type="text"
+                    value={editedUsername}
+                    onChange={handleUsernameChange}
+                  />
+                  {msg && <Styles.Message>{msg}</Styles.Message>}
+                </Styles.Input>
+                <Styles.ButtonBox>
+                  <Styles.SaveButton
+                    onClick={handleCheckNickname}
+                    isUsernameChecked={isUsernameChecked}
+                  >
+                    확인
+                  </Styles.SaveButton>
+                  <Styles.SaveButton
+                    onClick={handleSaveChanges}
+                    disabled={!isUsernameChecked}
                   >
                     저장
-                  </SaveButton>
-                  <CancelButton
+                  </Styles.SaveButton>
+                  <Styles.CancelButton
                     onClick={() => {
                       setEditedUsername(username);
                       setIsEditing({ ...isEditing, username: false });
                     }}
                   >
                     취소
-                  </CancelButton>
-                </ButtonBox>
+                  </Styles.CancelButton>
+                </Styles.ButtonBox>
               </>
             ) : (
               <>
-                <Name>{username}</Name>
-                <EditButton
+                <Styles.Name>{username}</Styles.Name>
+                <Styles.EditButton
                   onClick={() => setIsEditing({ ...isEditing, username: true })}
                 >
                   수정
-                </EditButton>
+                </Styles.EditButton>
               </>
             )}
-          </NameLabel>
-        </UserNameSection>
+          </Styles.NameLabel>
+        </Styles.UserNameSection>
 
-        <UserEmailSection>
-          <EmailTitle>이메일 주소</EmailTitle>
-          <EmailLabel>
-            <Email>{email}</Email>
-          </EmailLabel>
-          <SectionFooter>
+        <Styles.UserEmailSection>
+          <Styles.EmailTitle>이메일 주소</Styles.EmailTitle>
+          <Styles.EmailLabel>
+            <Styles.Email>{email}</Styles.Email>
+          </Styles.EmailLabel>
+          <Styles.SectionFooter>
             회원 인증 또는 시스템에서 발송하는 이메일을 수신하는 주소입니다.
-          </SectionFooter>
-        </UserEmailSection>
+          </Styles.SectionFooter>
+        </Styles.UserEmailSection>
 
-        <ActionSection>
-          <ActionTitle>비밀번호 변경 및 회원 탈퇴</ActionTitle>
-          <ActionButtonBox>
-            <PwButton>비밀번호 변경</PwButton>
-            <DelButton>회원 탈퇴</DelButton>
-          </ActionButtonBox>
-          <SectionFooter>
+        <Styles.ActionSection>
+          <Styles.ActionTitle>비밀번호 변경 및 회원 탈퇴</Styles.ActionTitle>
+          <Styles.ActionButtonBox>
+            <Styles.PwButton onClick={openTempPasswordModal}>비밀번호 변경</Styles.PwButton>
+            {isModalOpen && modalType === "tempPassword" && <TempPasswordModal />}
+            <Styles.DelButton>회원 탈퇴</Styles.DelButton>
+          </Styles.ActionButtonBox>
+          <Styles.SectionFooter>
             탈퇴 시 작성하신 포스트 및 댓글이 모두 삭제되며 복구되지 않습니다.
-          </SectionFooter>
-        </ActionSection>
-      </Container>
+          </Styles.SectionFooter>
+        </Styles.ActionSection>
+      </Styles.Container>
     </React.Fragment>
   );
 }
 
 export default MyPage;
-
-const Container = styled.div`
-  width: 100%;
-  padding: 20px;
-  max-width: 768px;
-  margin: 0 auto;
-`;
-
-const ProfileSection = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-`;
-
-const ProfileLabel = styled.label`
-  cursor: pointer;
-  margin-bottom: 1rem;
-`;
-
-const Preview = styled.img`
-  border-radius: 50%;
-  position: relative;
-  object-fit: cover;
-  width: 130px;
-  height: 130px;
-`;
-
-const ProfileButton = styled.button`
-  width: 10rem;
-  height: 32px;
-  border: none;
-  border-radius: 8px;
-  margin-bottom: 1rem;
-  padding-left: 20px;
-  padding-right: 20px;
-  font-size: 16px;
-  color: var(--background-white);
-  background-color: var(--primary-green1);
-  cursor: pointer;
-  font-weight: 700;
-
-  &:hover {
-    background-color: var(--primary-green2);
-  }
-`;
-
-const ProfileInput = styled.input`
-  display: none;
-`;
-
-const UserNameSection = styled.div`
-  padding-top: 1rem;
-  padding-bottom: 1rem;
-  border-top: 1px solid var(--border);
-  border-bottom: 1px solid var(--border);
-`;
-
-const UserEmailSection = styled.div`
-  padding-top: 1rem;
-  padding-bottom: 1rem;
-  border-bottom: 1px solid var(--border);
-`;
-
-const NameLabel = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-top: 2rem;
-  margin-bottom: 2rem;
-`;
-
-const Input = styled.div`
- display: flex;
- flex-direction: column;
-`;
-
-const NameInput = styled.input`
-  font-size: 1.5rem;
-`;
-
-const Message = styled.span`
-  color: ${(props) => (props.isUsernameChecked ? "black" : "red")};
-  font-size: 14px;
-  margin-top: 14px;
-`;
-
-const ButtonBox = styled.div`
-  display: flex;
-  justify-content: space-between;
-  gap: 16px;
-`;
-
-const Name = styled.h2`
-  font-size: 1.5rem;
-  font-weight: bold;
-`;
-
-const EmailLabel = styled.label`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-top: 1rem;
-  margin-bottom: 1rem;
-`;
-
-const EmailTitle = styled.h2`
-  font-size: 1.3rem;
-  padding-top: 20px;
-`;
-
-const Email = styled.span`
-  font-size: 1rem;
-  line-height: 1.5;
-`;
-
-const EditButton = styled.button`
-  width: 70px;
-  height: 32px;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-`;
-
-const SectionFooter = styled.p`
-  font-size: 0.875rem;
-  color: var(--text2);
-`;
-
-const SaveButton = styled.button`
-  width: 70px;
-  height: 32px;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-`;
-
-const CancelButton = styled.button`
-  width: 70px;
-  height: 32px;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-`;
-
-const ActionSection = styled.div`
-  padding-top: 2rem;
-  padding-bottom: 2rem;
-  display: flex;
-  flex-direction: column;
-`;
-
-const ActionTitle = styled.h2`
-  font-size: 1.2rem;
-`;
-
-const ActionButtonBox = styled.div`
-  margin-top: 1.2rem;
-  margin-bottom: 1.2rem;
-`;
-
-const PwButton = styled.button`
-  height: 32px;
-  padding-left: 20px;
-  padding-right: 20px;
-  font-size: 16px;
-  background-color: #ff6b6b;
-  color: var(--background-white);
-  border: none;
-  border-radius: 4px;
-  font-weight: 700;
-  margin-right: 10px;
-  cursor: pointer;
-`;
-
-const DelButton = styled.button`
-  height: 32px;
-  padding-left: 20px;
-  padding-right: 20px;
-  font-size: 16px;
-  background-color: #ff6b6b;
-  color: var(--background-white);
-  border: none;
-  border-radius: 4px;
-  font-weight: 700;
-  cursor: pointer;
-`;
