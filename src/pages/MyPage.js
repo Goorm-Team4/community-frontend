@@ -115,9 +115,18 @@ function MyPage() {
     }
   };
 
-  const handleImageReset = () => {
-    setEditedProfileImage(null);
-    setPreviewImage(defaultProfile);
+  const handleImageReset = async () => {
+    try {
+      setEditedProfileImage(null);
+      setPreviewImage(defaultProfile);
+
+      const updatedProfile = await updateProfile({ profileImageUrl: null });
+      dispatch(updateUser(updatedProfile));
+      alert("프로필이 변경되었습니다.");
+    } catch (error) {
+      console.error("이미지 제거 실패: ", error);
+      alert("프로필 이미지를 변경하는 데 실패했습니다. 다시 시도해주세요.");
+    }
   };
 
   const handleUsernameChange = (e) => {
