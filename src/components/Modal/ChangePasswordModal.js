@@ -46,7 +46,7 @@ function ChangePasswordModal() {
 
     try {
       const response = await axios.patch(
-        `${process.env.REACT_APP_API_BASE_URL}/api/v1/auth/password`,
+        `${process.env.REACT_APP_API_BASE_URL_PROXY}/api/v1/auth/password`,
         passwordInfo,
         {
           headers: {

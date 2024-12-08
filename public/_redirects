@@ -1,0 +1,2 @@
+/api/* http://3.38.209.37/api/:splat 200
+/oauth2/authorization/kakao http://3.38.209.37/oauth2/authorization/kakao 200

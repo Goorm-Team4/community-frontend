@@ -30,7 +30,7 @@ function LoginModal() {
   };
 
   const kakaoAuthRedirect = () => {
-    window.location.href = `${process.env.REACT_APP_API_BASE_URL}/oauth2/authorization/kakao`;
+    window.location.href = `${process.env.REACT_APP_API_BASE_URL_PROXY}/oauth2/authorization/kakao`;
   };
 
   const handleEmailLogin = async (e) => {

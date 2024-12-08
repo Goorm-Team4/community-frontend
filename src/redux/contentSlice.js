@@ -5,7 +5,7 @@ import axios from 'axios';
 export const contentRead = createAsyncThunk('contentSlice/fetchContentById',
   async (id) => {
     const response = await axios.post(
-      `${process.env.REACT_APP_API_BASE_URL}/post`,
+      `${process.env.REACT_APP_API_BASE_URL_PROXY}/post`,
       {
         id,
       },
