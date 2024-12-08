@@ -145,7 +145,8 @@ export const fetchProfile = async () => {
 export const updateProfile = async ({ username, profileImageUrl }) => {
   const formData = new FormData();
 
-  formData.append("username", username);
+  const jsonReq = JSON.stringify({ username });
+  formData.append("request", new Blob([jsonReq], { type: "application/json" }));
   
   if (profileImageUrl instanceof File) {
     formData.append("image", profileImageUrl);
