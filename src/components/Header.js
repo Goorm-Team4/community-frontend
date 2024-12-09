@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import logo1 from "../assets/logo.svg";
 import notification from "../assets/notification.svg";
 import search from "../assets/search.svg";
-import userProfile from "../assets/userProfile.png";
+import defaultProfile from "../assets/userProfile.png";
 import dropdown from "../assets/dropdown.svg";
 
 import LoginModal from "./Modal/LoginModal";
@@ -20,6 +20,8 @@ function Header() {
 
   const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
   const { isModalOpen, modalType } = useSelector((state) => state.modal);
+
+  const profileImageUrl = useSelector((state) => state.user.profileImageUrl);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -49,7 +51,7 @@ function Header() {
               <Styles.NoticeIcon src={notification} />
               <Styles.SearchIcon src={search} />
               <Styles.WriteButton>새 글 작성</Styles.WriteButton>
-              <Styles.ProfileIcon src={userProfile} />
+              <Styles.ProfileIcon src={profileImageUrl || defaultProfile} />
               <Styles.DropdownIcon src={dropdown} onClick={toggleDropdown} />
 
               {isDropdownOpen && (

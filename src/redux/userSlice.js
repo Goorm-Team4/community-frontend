@@ -25,11 +25,15 @@ export const userSlice = createSlice({
             state.isLoggedIn = false;
             state.accessToken = null;
             state.isPasswordChange = false;
+
+            // localStorage에서 userState 삭제
+            localStorage.removeItem('userState');
+            localStorage.removeItem('accessToken');
           },
         updateUser: (state, action) => {
             const { username, profileImageUrl } = action.payload || {};
             if (username) state.username = username;
-            if (profileImageUrl) state.profileImageUrl = profileImageUrl;
+            state.profileImageUrl = profileImageUrl;
         },
         changePasswordStatus: (state, action) => {
             state.isPasswordChange = action.payload;

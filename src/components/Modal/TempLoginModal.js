@@ -7,6 +7,7 @@ import closeButton from "../../assets/closeButton.svg";
 import { emailLogin } from "../../services/auth";
 import { loginUser } from "../../redux/userSlice";
 import { changePasswordStatus } from "../../redux/userSlice";
+import { clearLoading, setLoading } from "../../redux/loadingSlice";
 
 function TempLoginModal() {
   const [email, setEmail] = useState("");
@@ -22,6 +23,7 @@ function TempLoginModal() {
     e.preventDefault();
 
     try {
+      dispatch(setLoading());
       const response = await emailLogin(email, currentPassword);
       console.log("Login API Response:", response);
 
@@ -40,7 +42,7 @@ function TempLoginModal() {
         dispatch(closeModal());
         dispatch(changePasswordStatus(true));
         dispatch(openModal("changePassword"));
-        alert("로그인 성공");
+        dispatch(clearLoading());
 
       } else {
         alert("로그인에 실패했습니다. 다시 시도해주세요.");

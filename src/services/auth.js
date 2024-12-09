@@ -102,23 +102,42 @@ export const emailSignup = async (info, imageFile) => {
   }
 };
 
-// accessToken 저장
-export const storeLogin = (dispatch, location, navigate) => {
+export const storeLogin = async (dispatch, location, navigate) => {
   const accessToken =
     localStorage.getItem("accessToken") ||
     new URLSearchParams(location.search).get("accessToken");
 
     if (accessToken) {
-    dispatch(loginUser({ accessToken }));
+      localStorage.setItem("accessToken", accessToken);
+      
+      try {
+        const profile = await fetchProfile();
 
-      // 카카오 로그인 시 URL의 accessToken 제거
-      if (!localStorage.getItem("accessToken")) {
-        localStorage.setItem("accessToken", accessToken);
-        navigate("/", { replace: true });
+        dispatch(loginUser({
+          email: profile.email,
+          username: profile.username,
+          profileImageUrl: profile.profileImageUrl || null,
+          accessToken,
+        }));
+
+        // userState를 localStorage에 저장
+        localStorage.setItem('userState', JSON.stringify({
+          email: profile.email,
+          username: profile.username,
+          profileImageUrl: profile.profileImage || null,
+          accessToken: accessToken,
+          isLoggedIn: true,
+        }));
+
+        // 카카오 로그인 시 URL의 accessToken 제거
+        if (new URLSearchParams(location.search).get("accessToken")) {
+          navigate("/", { replace: true });
+        }
+      } catch (error) {
+        console.error("프로필 정보를 불러오는 데 실패했습니다.", error);
       }
-    }
+  }
 };
-
 
 // 프로필 조회
 export const fetchProfile = async () => {
@@ -136,7 +155,7 @@ export const fetchProfile = async () => {
   return {
     email,
     username,
-    profileImage: profileImageUrl, 
+    profileImageUrl, 
   };
 };
 
