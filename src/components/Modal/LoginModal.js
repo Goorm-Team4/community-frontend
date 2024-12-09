@@ -8,9 +8,9 @@ import googleIcon from "../../assets/googleIcon.svg";
 import kakaoIcon from "../../assets/kakaoIcon.svg";
 import useOnClickOutside from "../../hooks/useOnClickOutside";
 import { emailLogin } from "../../services/auth";
-import { loginUser } from "../../redux/userSlice";
 import { useNavigate } from "react-router-dom";
 import { closeModal, openModal } from "../../redux/modalSlice";
+import { clearLoading, setLoading } from "../../redux/loadingSlice";
 
 function LoginModal() {
   const [email, setEmail] = useState("");
@@ -42,23 +42,19 @@ function LoginModal() {
     }
 
     try {
+      dispatch(setLoading());
       const response = await emailLogin(email, password);
 
       if (response.code === "200") {
         const accessToken = response.result.accessToken;
         localStorage.setItem("accessToken", accessToken);
-        dispatch(loginUser({ 
-          email: response.result.email,
-          username: response.result.username,
-          accessToken: accessToken }));
-        
-        alert("로그인 성공");
+
+        dispatch(clearLoading());
         navigate("/");
       } else {
         alert("로그인에 실패했습니다. 다시 시도해주세요.");
       }
     } catch (error) {
-      console.log(email, password);
       console.error("로그인 실패: ", error.response?.data || error.message);
       alert("로그인에 실패했습니다. 다시 시도해주세요.");
       return;

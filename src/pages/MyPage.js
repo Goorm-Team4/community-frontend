@@ -6,12 +6,12 @@ import { fetchProfile, updateProfile, checkUsername } from "../services/auth";
 import { updateUser } from "../redux/userSlice";
 import { openModal } from "../redux/modalSlice";
 import TempPasswordModal from "../components/Modal/TempPasswordModal";
+import { clearLoading, setLoading } from "../redux/loadingSlice";
 
 function MyPage() {
   const user = useSelector((state) => state.user);
   const fileInputRef = useRef(null);
   const dispatch = useDispatch();
-  const token = localStorage.getItem("accessToken");
 
   const [email, setEmail] = useState(() => user.email || "");
   const [username, setUsername] = useState(() => user.username || "");
@@ -37,14 +37,17 @@ function MyPage() {
   useEffect(() => {
     const loadProfile = async () => {
       try {
-        const profile = await fetchProfile(token);
+        dispatch(setLoading());
+        const profile = await fetchProfile();
         setEmail(profile.email);
         setUsername(profile.username);
-        setProfileImage(profile.profileImage);
-        setPreviewImage(profile.profileImage);
+        setProfileImage(profile.profileImageUrl || defaultProfile);
+        setPreviewImage(profile.profileImageUrl || defaultProfile);
 
         // Redux 상태 업데이트
         dispatch(updateUser(profile));
+        dispatch(clearLoading());
+
       } catch (error) {
         console.error("프로필 정보를 가져오는 데 실패했습니다.", error);
         alert("프로필 정보를 불러오는 데 실패했습니다.");
@@ -52,7 +55,7 @@ function MyPage() {
     };
 
     loadProfile();
-  }, [token, dispatch]);
+  }, [dispatch]);
 
   // Redux 상태 변경 시 동기화
   useEffect(() => {
@@ -86,11 +89,6 @@ function MyPage() {
       // 동기화
       setEditedUsername(updatedProfile.username);
 
-      // 디버깅
-      console.log(updatedProfile.username);
-      console.log(email, username);
-      console.log(editedUsername);
-
       alert("프로필이 성공적으로 수정되었습니다.");
     } catch (error) {
       console.error("프로필 수정 실패:", error);
@@ -121,7 +119,15 @@ function MyPage() {
       setPreviewImage(defaultProfile);
 
       const updatedProfile = await updateProfile({ profileImageUrl: null });
-      dispatch(updateUser(updatedProfile));
+      console.log(updatedProfile);
+      dispatch(updateUser({...updatedProfile, profileImageUrl: null }));
+
+      // localStorage에 저장된 상태 업데이트
+      const savedUserState = JSON.parse(localStorage.getItem("userState"));
+      if (savedUserState) {
+        savedUserState.profileImageUrl = null;
+        localStorage.setItem("userState", JSON.stringify(savedUserState));
+      }
       alert("프로필이 변경되었습니다.");
     } catch (error) {
       console.error("이미지 제거 실패: ", error);
