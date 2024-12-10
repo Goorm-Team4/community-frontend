@@ -1,22 +1,34 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PostCard from '../components/PostCard';
 import { MainContianer, PostcardGrid } from '../styles/Styles';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import NavBar from '../components/NavBar';
+import { fetchContentList } from '../redux/listSlice';
+import { unwrapResult } from '@reduxjs/toolkit';
 
 
 
 function MainPage() {
+  const dispatch = useDispatch();
 
   const isList = useSelector((state) => state.contentList.contentList)
+  console.log(isList);
+
+
+  useEffect(() => {
+    const apiAction = dispatch(fetchContentList());
+    const apiResult = unwrapResult(apiAction);
+  }, [dispatch]);
 
   return (
     <MainContianer>
       <NavBar></NavBar>
       <PostcardGrid>
-        {isList.map((card) => (
+        {isList !== '' && isList.map((card) => (
           <PostCard key={card.id} card={card} />
         ))}
+        {isList.length === 0 && <div>
+          게시글이 없습니다.</div>}
       </PostcardGrid>
     </MainContianer>
   )

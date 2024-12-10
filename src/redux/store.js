@@ -5,6 +5,7 @@ import modalReducer from './modalSlice';
 import darkModeReducer from '../redux/darkModeSlice';
 import listSlice from '../redux/listSlice';
 import contentSlice from '../redux/contentSlice'
+import writeSlice from './writeSlice'
 
 export const store = configureStore({
   reducer: {
@@ -13,6 +14,7 @@ export const store = configureStore({
     user: userSlice,
     loading: loadingSlice,
     modal: modalReducer,
-    content: contentSlice
+    content: contentSlice,
+    write: writeSlice
   },
 });

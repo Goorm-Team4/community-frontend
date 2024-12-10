@@ -15,6 +15,7 @@ export const GlobalStyle = createGlobalStyle`
     --text2: #868e96;
     --text3: #212529;
     --border: #e0e0e0;
+    --primary-green: #12B886;
     --primary-green1: #20c997;
     --primary-green2: #12b886;
   }
@@ -42,7 +43,7 @@ export const GlobalStyle = createGlobalStyle`
 
 `
 
-export const MainContianer = styled.ul`
+export const MainContianer = styled.div`
   width: 1728px;
   height: fit-content;
   margin-left: auto;

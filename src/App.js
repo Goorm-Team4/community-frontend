@@ -8,6 +8,7 @@ import Header from "./components/Header";
 import Loading from "./components/Loading";
 import { useDispatch, useSelector } from "react-redux";
 import { storeLogin } from "./services/auth";
+import WritePage from "./pages/WritePage";
 
 function App() {
   const dispatch = useDispatch();
@@ -27,6 +28,7 @@ function App() {
       <Routes>
         <Route path="/" element={<MainPage />} />
         <Route path="/post/:id" element={<PostPage />} />
+        <Route path="/post/write" element={<WritePage />} />
       </Routes>
     </React.Fragment>
   );

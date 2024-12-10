@@ -6,7 +6,8 @@ import { dateSort, favoriteSort } from '../redux/listSlice';
 
 export default function NavBar() {
 
-  const isActive = useSelector((state) => state.darkMode.darkModeActive)
+  const isActive = useSelector((state) => state.darkMode.darkModeActive);
+
   const dispatch = useDispatch();
 
   return (
@@ -20,9 +21,9 @@ export default function NavBar() {
       </LeftNavbar>
       <RightNavbar>
         <NavItems>
-            <ToggleContainer $active={isActive} onClick={() => dispatch(toggle())}>
-              {isActive ? '다크' : '화이트'}
-            </ToggleContainer>
+          <ToggleContainer $active={isActive} onClick={() => dispatch(toggle())}>
+            {isActive ? '다크' : '화이트'}
+          </ToggleContainer>
         </NavItems>
       </RightNavbar>
     </Navbar>
