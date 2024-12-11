@@ -28,6 +28,7 @@ export const NoticeIcon = styled.img`
   padding: 10px;
   border-radius: 50%;
   transition: background-color 0.125s;
+  box-sizing: content-box;
 
   &:hover {
     background-color: rgba(0, 0, 0, 0.1);
@@ -41,6 +42,7 @@ export const SearchIcon = styled.img`
   padding: 10px;
   border-radius: 50%;
   transition: background-color 0.125s;
+  box-sizing: content-box;
 
   &:hover {
     background-color: rgba(0, 0, 0, 0.1);
@@ -68,8 +70,10 @@ export const WriteButton = styled.button`
 
 export const ProfileIcon = styled.img`
   width: 40px;
+  height: 40px;
   border-radius: 50%;
   cursor: pointer;
+  object-fit: cover;
 `;
 
 export const DropdownIcon = styled.img`

@@ -5,15 +5,15 @@ import { useNavigate } from "react-router-dom";
 import logo1 from "../assets/logo.svg";
 import notification from "../assets/notification.svg";
 import search from "../assets/search.svg";
-import userProfile from "../assets/userProfile.png";
+import defaultProfile from "../assets/userProfile.png";
 import dropdown from "../assets/dropdown.svg";
 
 import LoginModal from "./Modal/LoginModal";
 import SignupModal from "./Modal/SignupModal";
 import { useDispatch, useSelector } from "react-redux";
-import { openModal, closeModal } from "../redux/modalSlice";
-import { useDebounce } from "../hooks/useDebounce";
+import { openModal } from "../redux/modalSlice";
 import { logoutUser } from "../redux/userSlice";
+
 
 function Header() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -22,24 +22,13 @@ function Header() {
   const { isModalOpen, modalType } = useSelector((state) => state.modal);
   const isLogin = useSelector((state) => state.user.accessToken);
 
+  const profileImageUrl = useSelector((state) => state.user.profileImageUrl);
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const debouncedLoginModal = useDebounce("login", 500);
-  const debouncedSignupModal = useDebounce("signup", 500);
-
   const openLoginModal = () => {
-    dispatch(openModal(debouncedLoginModal));
-  };
-
-  const openSignupModal = () => {
-    dispatch(openModal(debouncedSignupModal));
-  };
-
-  const handleCloseModal = () => {
-    if (isModalOpen) {
-      dispatch(closeModal());
-    }
+    dispatch(openModal("login"));
   };
 
   const toggleDropdown = () => {
@@ -50,7 +39,7 @@ function Header() {
     localStorage.removeItem("accessToken");
     dispatch(logoutUser());
     navigate("/");
-  }
+  };
 
   const openWrite = () => {
     if (isLogin) {
@@ -70,15 +59,17 @@ function Header() {
             <Styles.RightSection>
               <Styles.NoticeIcon src={notification} />
               <Styles.SearchIcon src={search} />
+
               <Styles.WriteButton onClick={openWrite}>새 글 작성</Styles.WriteButton>
-              <Styles.ProfileIcon src={userProfile} />
+              <Styles.ProfileIcon src={profileImageUrl || defaultProfile} />
+
               <Styles.DropdownIcon src={dropdown} onClick={toggleDropdown} />
 
               {isDropdownOpen && (
                 <Styles.DropdownBox>
                   <Styles.DropdownMenu>
                     <Styles.DropdownItem>내 벨로그</Styles.DropdownItem>
-                    <Styles.DropdownItem>설정</Styles.DropdownItem>
+                    <Styles.DropdownItem onClick={() => { navigate("/mypage"); toggleDropdown(); }}>설정</Styles.DropdownItem>
                     <Styles.DropdownItem onClick={handleLogout}>로그아웃</Styles.DropdownItem>
                   </Styles.DropdownMenu>
                 </Styles.DropdownBox>
@@ -89,19 +80,8 @@ function Header() {
               <Styles.NoticeIcon src={notification} />
               <Styles.SearchIcon src={search} />
               <Styles.LoginButton onClick={openLoginModal}>로그인</Styles.LoginButton>
-              {isModalOpen && modalType === "login" && (
-                <LoginModal
-                  closeModal={handleCloseModal}
-                  openSignupModal={openSignupModal}
-                />
-              )}
-
-              {isModalOpen && modalType === "signup" && (
-                <SignupModal
-                  closeModal={handleCloseModal}
-                  openLoginModal={openLoginModal}
-                />
-              )}
+              {isModalOpen && modalType === "login" && <LoginModal />}
+              {isModalOpen && modalType === "signup" && <SignupModal />}
             </Styles.RightSection>
           )}
         </Styles.HeaderBox>

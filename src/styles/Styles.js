@@ -15,7 +15,7 @@ export const GlobalStyle = createGlobalStyle`
     --text2: #868e96;
     --text3: #212529;
     --border: #e0e0e0;
-    --primary-green: #12B886;
+    --button-gray: #efefef;
     --primary-green1: #20c997;
     --primary-green2: #12b886;
   }
