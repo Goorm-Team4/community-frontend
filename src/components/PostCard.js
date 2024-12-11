@@ -11,7 +11,7 @@ export default function PostCard({ card }) {
 
   const getMonthDiff = () => {
     const today = new Date();
-    const createContentDay = new Date(card.date);
+    const createContentDay = new Date(card.createdAt);
 
     const diffDate = today.getTime() - createContentDay.getTime();
 
@@ -33,22 +33,23 @@ export default function PostCard({ card }) {
             {card.title}
           </Styles.PostcardContentTitle>
           <p>
+            
             {card.subscript}
           </p>
         </Link>
         <Styles.PostcardContentSubInfo>
           <span>{getMonthDiff()}일 전</span>
           <span className='separator'>·</span>
-          <span>{card.comment_count}개의 댓글</span>
+          <span>{card.commentCount}개의 댓글</span>
         </Styles.PostcardContentSubInfo>
       </Styles.PostcardContent>
       <Styles.PostcardFooter>
         <Link>
           <img src={tempIcon} alt='icon' />
-          <span>by <b>{card.writer}</b></span>
+          <span>by <b>{card.author}</b></span>
         </Link>
         <Styles.PostcardFooterLikes>
-          <svg viewBox='0 0 24 24'><path fill="currentColor" d="m18 1-6 4-6-4-6 5v7l12 10 12-10V6z"></path></svg> {card.favorite}
+          <svg viewBox='0 0 24 24'><path fill="currentColor" d="m18 1-6 4-6-4-6 5v7l12 10 12-10V6z"></path></svg> {card.likeCount}
         </Styles.PostcardFooterLikes>
       </Styles.PostcardFooter>
     </Styles.Postcard>

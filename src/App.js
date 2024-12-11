@@ -12,6 +12,7 @@ import Loading from "./components/Loading";
 import TempLoginModal from "./components/Modal/TempLoginModal";
 import ChangePasswordModal from "./components/Modal/ChangePasswordModal";
 import { storeLogin } from "./services/auth";
+import WritePage from "./pages/WritePage";
 
 function App() {
   const dispatch = useDispatch();
@@ -37,6 +38,7 @@ function App() {
           </ProtectedRoute>
         }/>
         <Route path="/post/:id" element={<PostPage />} />
+        <Route path="/post/write" element={<WritePage />} />
       </Routes>
 
       {isModalOpen && (

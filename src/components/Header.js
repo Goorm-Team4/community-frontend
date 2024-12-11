@@ -20,6 +20,7 @@ function Header() {
 
   const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
   const { isModalOpen, modalType } = useSelector((state) => state.modal);
+  const isLogin = useSelector((state) => state.user.accessToken);
 
   const profileImageUrl = useSelector((state) => state.user.profileImageUrl);
 
@@ -40,6 +41,14 @@ function Header() {
     navigate("/");
   };
 
+  const openWrite = () => {
+    if (isLogin) {
+      navigate("/post/write");
+    } else {
+      alert('로그인을 해주세요');
+    }
+  } 
+
   return (
     <React.Fragment>
       <Styles.HeaderContainer>
@@ -50,8 +59,10 @@ function Header() {
             <Styles.RightSection>
               <Styles.NoticeIcon src={notification} />
               <Styles.SearchIcon src={search} />
-              <Styles.WriteButton>새 글 작성</Styles.WriteButton>
+
+              <Styles.WriteButton onClick={openWrite}>새 글 작성</Styles.WriteButton>
               <Styles.ProfileIcon src={profileImageUrl || defaultProfile} />
+
               <Styles.DropdownIcon src={dropdown} onClick={toggleDropdown} />
 
               {isDropdownOpen && (

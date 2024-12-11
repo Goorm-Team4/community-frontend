@@ -43,7 +43,7 @@ export const GlobalStyle = createGlobalStyle`
 
 `
 
-export const MainContianer = styled.ul`
+export const MainContianer = styled.div`
   width: 1728px;
   height: fit-content;
   margin-left: auto;
