@@ -4,7 +4,7 @@ import axios from 'axios';
 export const fetchContentList = createAsyncThunk('listSlice',
   async () => {
     const response = await axios.get(
-      `${process.env.REACT_APP_API_BASE_URL}/api/v1/posts`,
+      `${process.env.REACT_APP_API_BASE_URL_PROXY}/api/v1/posts`,
       {
         headers: {
           "Content-Type": "application/json",

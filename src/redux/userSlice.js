@@ -29,7 +29,7 @@ export const userSlice = createSlice({
             // localStorage에서 userState 삭제
             localStorage.removeItem('userState');
             localStorage.removeItem('accessToken');
-          },
+        },
         updateUser: (state, action) => {
             const { username, profileImageUrl } = action.payload || {};
             if (username) state.username = username;
