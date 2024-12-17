@@ -8,22 +8,29 @@ import googleIcon from "../../assets/googleIcon.svg";
 import kakaoIcon from "../../assets/kakaoIcon.svg";
 import useOnClickOutside from "../../hooks/useOnClickOutside";
 import { emailLogin } from "../../services/auth";
-import { loginUser } from "../../redux/userSlice";
 import { useNavigate } from "react-router-dom";
+import { closeModal, openModal } from "../../redux/modalSlice";
+import { clearLoading, setLoading } from "../../redux/loadingSlice";
 
-function LoginModal({ closeModal, openSignupModal }) {
+function LoginModal() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  const handleClose = () => { dispatch(closeModal()); };
+
   // 모달 영역 외부 클릭 시 닫힘
   const modalRef = useRef();
-  useOnClickOutside(modalRef, closeModal);
+  useOnClickOutside(modalRef, handleClose);
+
+  const openSignupModal = () => {
+    dispatch(openModal("signup"));
+  };
 
   const kakaoAuthRedirect = () => {
-    window.location.href = `${process.env.REACT_APP_API_BASE_URL}/oauth2/authorization/kakao`;
+    window.location.href = `${process.env.REACT_APP_API_BASE_URL_PROXY}/oauth2/authorization/kakao`;
   };
 
   const handleEmailLogin = async (e) => {
@@ -35,20 +42,19 @@ function LoginModal({ closeModal, openSignupModal }) {
     }
 
     try {
+      dispatch(setLoading());
       const response = await emailLogin(email, password);
 
       if (response.code === "200") {
         const accessToken = response.result.accessToken;
         localStorage.setItem("accessToken", accessToken);
-        dispatch(loginUser({ accessToken }));
-        
-        alert("로그인 성공");
+
+        dispatch(clearLoading());
         navigate("/");
       } else {
         alert("로그인에 실패했습니다. 다시 시도해주세요.");
       }
     } catch (error) {
-      console.log(email, password);
       console.error("로그인 실패: ", error.response?.data || error.message);
       alert("로그인에 실패했습니다. 다시 시도해주세요.");
       return;
@@ -67,7 +73,7 @@ function LoginModal({ closeModal, openSignupModal }) {
           <Styles.LoginSection>
             <Styles.CloseButton>
               <img
-                onClick={closeModal}
+                onClick={handleClose}
                 src={closeButton}
                 alt="closeBtn"
                 style={{ cursor: "pointer" }}

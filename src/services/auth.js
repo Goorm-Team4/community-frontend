@@ -3,7 +3,7 @@ import { loginUser } from "../redux/userSlice";
 
 export const emailLogin = async (email, password) => {
   const response = await axios.post(
-    `${process.env.REACT_APP_API_BASE_URL}/api/v1/auth/login`,
+    `${process.env.REACT_APP_API_BASE_URL_PROXY}/api/v1/auth/login`,
     {
       email,
       password,
@@ -21,7 +21,7 @@ export const emailLogin = async (email, password) => {
 export const onValidMail = async (email) => {
   try {
     const response = await axios.post(
-      `${process.env.REACT_APP_API_BASE_URL}/api/v1/auth/email/verification`,
+      `${process.env.REACT_APP_API_BASE_URL_PROXY}/api/v1/auth/email/verification`,
       {},
       {
         params: { email },
@@ -41,7 +41,7 @@ export const onValidMail = async (email) => {
 export const onValidCode = async (email, authCode) => {
   try {
     const response = await axios.get(
-      `${process.env.REACT_APP_API_BASE_URL}/api/v1/auth/email/verification`,
+      `${process.env.REACT_APP_API_BASE_URL_PROXY}/api/v1/auth/email/verification`,
       {
         params: { email, authCode },
         headers: {
@@ -59,7 +59,7 @@ export const onValidCode = async (email, authCode) => {
 export const checkUsername = async (username) => {
   try {
     const response = await axios.get(
-      `${process.env.REACT_APP_API_BASE_URL}/api/v1/auth/username/validation`,
+      `${process.env.REACT_APP_API_BASE_URL_PROXY}/api/v1/auth/username/validation`,
       {
         params: { username },
         headers: {
@@ -87,7 +87,7 @@ export const emailSignup = async (info, imageFile) => {
 
   try {
     const response = await axios.post(
-      `${process.env.REACT_APP_API_BASE_URL}/api/v1/auth/signup`,
+      `${process.env.REACT_APP_API_BASE_URL_PROXY}/api/v1/auth/signup`,
       formData,
       {
         headers: {
@@ -102,19 +102,94 @@ export const emailSignup = async (info, imageFile) => {
   }
 };
 
-// accessToken 저장
-export const storeLogin = (dispatch, location, navigate) => {
+export const storeLogin = async (dispatch, location, navigate) => {
   const accessToken =
     localStorage.getItem("accessToken") ||
     new URLSearchParams(location.search).get("accessToken");
 
-  if (accessToken) {
-    dispatch(loginUser({ accessToken }));
-
-    // 카카오 로그인 시 URL의 accessToken 제거
-    if (!localStorage.getItem("accessToken")) {
+    if (accessToken) {
       localStorage.setItem("accessToken", accessToken);
-      navigate("/", { replace: true });
+      
+      try {
+        const profile = await fetchProfile();
+
+        dispatch(loginUser({
+          email: profile.email,
+          username: profile.username,
+          profileImageUrl: profile.profileImageUrl || null,
+          accessToken,
+        }));
+
+        // userState를 localStorage에 저장
+        localStorage.setItem('userState', JSON.stringify({
+          email: profile.email,
+          username: profile.username,
+          profileImageUrl: profile.profileImage || null,
+          accessToken: accessToken,
+          isLoggedIn: true,
+        }));
+
+        // 카카오 로그인 시 URL의 accessToken 제거
+        if (new URLSearchParams(location.search).get("accessToken")) {
+          navigate("/", { replace: true });
+        }
+      } catch (error) {
+        console.error("프로필 정보를 불러오는 데 실패했습니다.", error);
+      }
+  }
+};
+
+// 프로필 조회
+export const fetchProfile = async () => {
+  const token = localStorage.getItem("accessToken");
+
+  const response = await axios.get(
+    `${process.env.REACT_APP_API_BASE_URL_PROXY}/api/v1/members/me`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`, 
+      },
     }
+  );
+  const { email, username, profileImageUrl } = response.data.result;
+  return {
+    email,
+    username,
+    profileImageUrl, 
+  };
+};
+
+
+// 프로필 수정
+export const updateProfile = async ({ username, profileImageUrl }) => {
+  const formData = new FormData();
+
+  const jsonReq = JSON.stringify({ username });
+  formData.append("request", new Blob([jsonReq], { type: "application/json" }));
+  
+  if (profileImageUrl instanceof File) {
+    formData.append("image", profileImageUrl);
+  }
+
+  const token = localStorage.getItem("accessToken");
+
+  try {
+    console.log("보내는 데이터: ", [...formData.entries()]);
+
+    const response = await axios.patch(
+      `${process.env.REACT_APP_API_BASE_URL_PROXY}/api/v1/members/me`,
+      formData,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+    return response.data.result;
+
+  } catch (error) {
+    console.error("프로필 수정 실패: ", error.response?.data || error.message);
+    throw error;
   }
 };

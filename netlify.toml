@@ -1,0 +1,16 @@
+[[redirects]]
+  from = "/api/*"
+  to = "http://3.38.209.37/api/:splat"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/oauth2/authorization/kakao"
+  to = "http://3.38.209.37/oauth2/authorization/kakao"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

@@ -91,7 +91,7 @@ export const SendButton = styled.button`
   width: 100px;
   height: 40px;
   padding: 3px 6px;
-  background-color: var(--primary-green);
+  background-color: var(--primary-green2);
   color: var(--white);
   cursor: pointer;
 `
@@ -100,7 +100,7 @@ export const BackButton = styled.button`
   width: 100px;
   height: 40px;
   padding: 3px 6px;
-  background-color: var(--primary-green);
+  background-color: var(--primary-green2);
   color: var(--white);
   cursor: pointer;
 `
