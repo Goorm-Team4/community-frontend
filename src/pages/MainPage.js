@@ -25,7 +25,7 @@ function MainPage() {
       <NavBar></NavBar>
       <PostcardGrid>
         {isList !== '' && isList.map((card) => (
-          <PostCard key={card.id} card={card} />
+          <PostCard key={card.postId} card={card} />
         ))}
         {isList.length === 0 && <div>
           게시글이 없습니다.</div>}

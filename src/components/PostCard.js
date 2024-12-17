@@ -1,6 +1,5 @@
 import React from 'react'
 import * as Styles from '../styles/PostcardStyles'
-import tempImg from '../assets/image.png'
 import tempIcon from '../assets/kakaoIcon.svg'
 import { Link } from 'react-router-dom'
 import { useSelector } from 'react-redux'
@@ -21,20 +20,20 @@ export default function PostCard({ card }) {
   return (
     <Styles.Postcard $active={isActive}>
       <Styles.PostcardImage>
-        <Link to={`/post/${card.id}`}>
+        <Link to={`/post/${card.postId}`}>
           <div style={{ paddingTop: '52.2%' }}>
-            <img src={tempImg} alt='img' />
+            <img src={card.imageUrl} alt='img' />
           </div>
         </Link>
       </Styles.PostcardImage>
       <Styles.PostcardContent>
-        <Link to={`/post/${card.id}`}>
+        <Link to={`/post/${card.postId}`}>
           <Styles.PostcardContentTitle>
             {card.title}
           </Styles.PostcardContentTitle>
           <p>
             
-            {card.subscript}
+            {card.title}
           </p>
         </Link>
         <Styles.PostcardContentSubInfo>
