@@ -1,6 +1,5 @@
 import React from 'react'
 import * as Styles from '../styles/PostcardStyles'
-import tempImg from '../assets/image.png'
 import tempIcon from '../assets/kakaoIcon.svg'
 import { Link } from 'react-router-dom'
 import { useSelector } from 'react-redux'
@@ -21,20 +20,20 @@ export default function PostCard({ card }) {
   return (
     <Styles.Postcard $active={isActive}>
       <Styles.PostcardImage>
-        <Link to={`/post/${card.id}`}>
+        <Link to={`/post/${card.postId}`}>
           <div style={{ paddingTop: '52.2%' }}>
-            <img src={tempImg} alt='img' />
+            <img src={card.imageUrl} alt='img' />
           </div>
         </Link>
       </Styles.PostcardImage>
       <Styles.PostcardContent>
-        <Link to={`/post/${card.id}`}>
+        <Link to={`/post/${card.postId}`}>
           <Styles.PostcardContentTitle>
             {card.title}
           </Styles.PostcardContentTitle>
           <p>
             
-            {card.subscript}
+            {card.title}
           </p>
         </Link>
         <Styles.PostcardContentSubInfo>
@@ -46,7 +45,7 @@ export default function PostCard({ card }) {
       <Styles.PostcardFooter>
         <Link>
           <img src={tempIcon} alt='icon' />
-          <span>by <b>{card.author}</b></span>
+          <span>by <b>{card.author.username}</b></span>
         </Link>
         <Styles.PostcardFooterLikes>
           <svg viewBox='0 0 24 24'><path fill="currentColor" d="m18 1-6 4-6-4-6 5v7l12 10 12-10V6z"></path></svg> {card.likeCount}

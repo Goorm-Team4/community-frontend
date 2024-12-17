@@ -1,6 +1,12 @@
 {
+  "author" : {
+    "username" : "cola"
+  },
   "title" : "velog dashboard 를 살려주세요..! (수정됨)",
   "writer" : "cael",
   "date" : "2024-11-20",
-  "content" : "id 1번 글 : "
+  "contentMain" : "id 1번 글 : ",
+  "comments" : [
+
+  ]
 }

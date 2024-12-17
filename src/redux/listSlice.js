@@ -25,8 +25,8 @@ const listSlice = createSlice({
   reducers: {
     favoriteSort(state) {
       const newContentList = state.contentList.sort((a, b) => {
-        if (a.favorite < b.favorite) return 1;
-        if (a.favorite > b.favorite) return -1;
+        if (a.likeCount < b.likeCount) return 1;
+        if (a.likeCount > b.likeCount) return -1;
         return 0;
       });
 
@@ -54,7 +54,10 @@ const listSlice = createSlice({
 
         state.contentList = action.payload.result.posts;
       })
-      .addDefaultCase((state, action) => { })
+      .addDefaultCase((state, action) => { 
+        console.error("게시글 목록 로딩 실패");
+        
+      })
   }
 });
 

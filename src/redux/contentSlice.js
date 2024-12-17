@@ -1,26 +1,29 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import axios from 'axios';
+import contenttemp from '../temp/contentTemp.json'
 
 export const fetchContentRead = createAsyncThunk('contentSlice',
-  async (id) => {
-    const response = await axios.post(
-      `${process.env.REACT_APP_API_BASE_URL}/api/v1/posts`,
-      {
-        id,
-      },
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
-    return response.data;
+  async ( postId ) => {
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_API_BASE_URL}/api/v1/posts/${postId}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      return response.data;
+
+    } catch (error) {
+      console.log("api 오류");
+    }
   }
 );
 
 const initialState = {
-  id: "",
-  content: []
+  id: 1,
+  contentData: []
 }
 
 const contentSlice = createSlice({
@@ -28,7 +31,9 @@ const contentSlice = createSlice({
   initialState,
   reducers: {
     getId(state, action) {
-      state.id = action.payload.id;
+      state.postId = action.payload;
+      console.log(`id: ${state.postId}`);
+
     },
   },
   extraReducers: builder => {
@@ -43,10 +48,13 @@ const contentSlice = createSlice({
 
         state.content = action.payload.result;
       })
-      .addDefaultCase((state, action) => { })
+      .addDefaultCase((state, action) => {
+        console.error("게시글 조회 실패");
+
+      })
   }
 });
 
-export const { getId } = contentSlice.actions
+export const { } = contentSlice.actions
 
 export default contentSlice.reducer
